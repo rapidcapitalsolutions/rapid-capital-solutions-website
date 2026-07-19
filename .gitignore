@@ -2,3 +2,7 @@
 .DS_Store
 Thumbs.db
 .cloudflare-token.local
+.resend-api-key.local
+workers/rcs-apply/.wrangler/
+workers/rcs-apply/node_modules/
+workers/rcs-apply/wrangler.toml.bak

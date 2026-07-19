@@ -1694,3 +1694,175 @@ section.alt { background: var(--white); }
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
 }
+
+/* ── Electronic signature ── */
+.sign-page-body { background: var(--paper); }
+.sign-secure-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--teal);
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(26, 107, 106, 0.25);
+  border-radius: 999px;
+  background: var(--teal-soft);
+}
+.sign-main { padding: calc(var(--nav-h) + 2rem) 0 4rem; }
+.sign-shell { max-width: 1100px; }
+.sign-panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-sm);
+}
+.sign-progress {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+.sign-progress span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mist);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: var(--paper);
+}
+.sign-progress span.active {
+  color: var(--white);
+  background: var(--ink);
+}
+.sign-layout {
+  display: grid;
+  grid-template-columns: 1.35fr 0.9fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+.sign-doc-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.sign-doc-header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0.25rem 0 0;
+  font-weight: 500;
+}
+.sign-app-id {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--slate);
+  white-space: nowrap;
+  padding: 0.4rem 0.7rem;
+  border-radius: 8px;
+  background: var(--paper);
+}
+.sign-doc-body h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin: 1.5rem 0 0.75rem;
+}
+.sign-dl {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+}
+.sign-dl > div {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 0.75rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+.sign-dl dt { color: var(--mist); font-weight: 600; margin: 0; }
+.sign-dl dd { margin: 0; color: var(--ink); }
+.sign-disclosures {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--slate);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+.sign-disclosures li { margin-bottom: 0.65rem; }
+.sign-action h2 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
+}
+.sign-muted { color: var(--mist); font-size: 0.92rem; margin: 0 0 1rem; }
+.sign-pad-wrap {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background: #fff;
+}
+.sign-pad-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--slate);
+}
+#sign-canvas {
+  display: block;
+  width: 100%;
+  height: 200px;
+  cursor: crosshair;
+  touch-action: none;
+  background:
+    linear-gradient(transparent 70%, rgba(184,115,51,0.15) 70%, rgba(184,115,51,0.15) 71%, transparent 71%);
+}
+.sign-consents {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0 0 1rem;
+}
+.sign-consents label {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  font-size: 0.85rem;
+  color: var(--slate);
+  line-height: 1.4;
+  cursor: pointer;
+}
+.sign-consents input { margin-top: 0.2rem; flex-shrink: 0; }
+.sign-legal-note {
+  margin: 0.85rem 0 0;
+  font-size: 0.75rem;
+  color: var(--mist);
+  line-height: 1.5;
+}
+.sign-done-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--copper);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.sign-error h1, #sign-done h1, #sign-loading p {
+  font-family: var(--font-display);
+}
+@media (max-width: 900px) {
+  .sign-layout { grid-template-columns: 1fr; }
+  .sign-dl > div { grid-template-columns: 1fr; gap: 0.15rem; }
+}

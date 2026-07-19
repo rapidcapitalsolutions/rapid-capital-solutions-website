@@ -1,6 +1,6 @@
 /**
- * Rapid Capital Solutions — apply form handler (website only).
- * Posts to Cloudflare Worker on your domain when configured — never CRM.
+ * Rapid Capital Solutions — apply form handler.
+ * Posts to Cloudflare Worker, then redirects to RCS e-sign.
  */
 (function () {
   'use strict';
@@ -88,6 +88,13 @@
       if (!res.ok || !json.ok) {
         throw new Error(json.detail || json.error || 'Submission failed');
       }
+
+      if (json.sign_url) {
+        setStatus('Application saved — redirecting to secure signature…', 'success');
+        window.location.href = json.sign_url;
+        return;
+      }
+
       form.reset();
       form.hidden = true;
       const thanks = document.getElementById('apply-thanks');

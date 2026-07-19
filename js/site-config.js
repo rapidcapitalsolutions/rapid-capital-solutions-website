@@ -1,6 +1,7 @@
-/** Site config — website only. Worker URL set when Cloudflare worker is deployed. */
+/** Site config — website only. */
 window.RCS_CONFIG = {
   siteUrl: 'https://rapidcapitalsolutions.com',
-  applyWorkerUrl: '', // e.g. 'https://rapidcapitalsolutions.com/api/apply'
+  // Set after worker deploy (see workers/README.md)
+  applyWorkerUrl: 'https://rapidcapitalsolutions.com/api/apply',
   submissionsEmail: 'submissions@rapidcapitalsolutions.com',
 };

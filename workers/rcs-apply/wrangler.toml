@@ -1,0 +1,17 @@
+name = "rcs-apply"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+workers_dev = false
+
+[[kv_namespaces]]
+binding = "RCS_APPS"
+id = "d254640167cd4883912612ad80e5a9ac"
+preview_id = "d254640167cd4883912612ad80e5a9ac"
+
+[vars]
+SIGN_BASE_URL = "https://rapidcapitalsolutions.com"
+NOTIFY_EMAIL = "submissions@rapidcapitalsolutions.com"
+
+[[routes]]
+pattern = "rapidcapitalsolutions.com/api/*"
+zone_name = "rapidcapitalsolutions.com"

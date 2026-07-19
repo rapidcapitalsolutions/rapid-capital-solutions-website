@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Electronically sign your Rapid Capital Solutions funding application.">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Sign Application | Rapid Capital Solutions</title>
+  <link rel="canonical" href="https://rapidcapitalsolutions.com/sign.html">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&amp;family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=11">
+</head>
+<body class="sign-page-body">
+
+  <header class="site-header">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-mark">R</div>
+        <div class="logo-text">Rapid Capital Solutions<span>Secure Electronic Signature</span></div>
+      </a>
+      <div class="nav-cta">
+        <span class="sign-secure-badge">Encrypted session</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="sign-main">
+    <div class="container sign-shell">
+      <div id="sign-loading" class="sign-panel">
+        <p>Loading your application…</p>
+      </div>
+
+      <div id="sign-error" class="sign-panel sign-error" hidden>
+        <h1>Link unavailable</h1>
+        <p id="sign-error-msg">This signing link is invalid or has expired.</p>
+        <a href="apply.html" class="btn btn-copper">Start a new application</a>
+      </div>
+
+      <div id="sign-done" class="sign-panel" hidden>
+        <div class="sign-done-icon" aria-hidden="true">✓</div>
+        <h1>Application signed</h1>
+        <p>Thank you. Your electronically signed application <strong id="sign-done-id"></strong> was sent to our funding team.</p>
+        <p class="sign-muted">A confirmation email is on the way. A specialist will follow up shortly.</p>
+        <a href="index.html" class="btn btn-primary">Back to home</a>
+      </div>
+
+      <div id="sign-form-wrap" hidden>
+        <div class="sign-progress" aria-hidden="true">
+          <span class="active">1 Review</span>
+          <span>2 Sign</span>
+          <span>3 Finish</span>
+        </div>
+
+        <div class="sign-layout">
+          <section class="sign-doc sign-panel">
+            <div class="sign-doc-header">
+              <div>
+                <div class="section-label">Electronic Document</div>
+                <h1>Business Funding Application</h1>
+              </div>
+              <div class="sign-app-id">ID <span id="sign-app-id"></span></div>
+            </div>
+
+            <div class="sign-doc-body">
+              <h2>Applicant summary</h2>
+              <dl class="sign-dl" id="sign-preview"></dl>
+
+              <h2>Disclosures</h2>
+              <ol class="sign-disclosures" id="sign-disclosures"></ol>
+            </div>
+          </section>
+
+          <aside class="sign-action sign-panel">
+            <h2>Adopt your signature</h2>
+            <p class="sign-muted">Draw below or type your full legal name. This is your electronic signature on the application.</p>
+
+            <div class="form-group">
+              <label for="typed_name">Full legal name *</label>
+              <input type="text" id="typed_name" autocomplete="name" required placeholder="Type your full name">
+            </div>
+
+            <div class="sign-pad-wrap">
+              <div class="sign-pad-toolbar">
+                <span>Draw signature</span>
+                <button type="button" class="btn btn-outline" id="sign-clear" style="padding:0.35rem 0.75rem;font-size:0.8rem">Clear</button>
+              </div>
+              <canvas id="sign-canvas" width="640" height="200" aria-label="Signature pad"></canvas>
+            </div>
+
+            <div class="sign-consents" id="sign-consents">
+              <label><input type="checkbox" id="c-electronic" required> I agree to sign electronically</label>
+              <label><input type="checkbox" id="c-accuracy" required> Information is true and complete</label>
+              <label><input type="checkbox" id="c-credit" required> I authorize credit checks as described</label>
+              <label><input type="checkbox" id="c-communication" required> I consent to contact about this application</label>
+            </div>
+
+            <div id="sign-status" class="apply-status" hidden role="status"></div>
+
+            <button type="button" class="btn btn-copper btn-lg" id="sign-submit" style="width:100%">Finish &amp; Submit</button>
+            <p class="sign-legal-note">By finishing, you create a certificate of completion with timestamp, IP, and document hash — retained with your application.</p>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/site-config.js"></script>
+  <script src="js/sign.js"></script>
+</body>
+</html>
