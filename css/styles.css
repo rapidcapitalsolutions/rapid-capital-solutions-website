@@ -595,10 +595,10 @@ section.alt { background: var(--white); }
 }
 .hero-slider-labels {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.15rem;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.1rem;
   margin-top: 0.7rem;
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 600;
   color: var(--mist);
   text-align: center;
