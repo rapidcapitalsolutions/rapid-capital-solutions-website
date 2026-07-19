@@ -96,7 +96,7 @@ foreach ($ip in @("185.199.108.153", "185.199.109.153", "185.199.110.153", "185.
 Ensure-DnsRecord -ZoneId $zoneId -Type CNAME -Name "www" -Content "rapidcapitalsolutions.github.io" -Proxied $true
 
 Write-Host "`n--- SSL / HTTPS ---"
-Set-CfSetting -ZoneId $zoneId -Id "ssl" -Value "flexible"
+Set-CfSetting -ZoneId $zoneId -Id "ssl" -Value "full"
 Set-CfSetting -ZoneId $zoneId -Id "always_use_https" -Value "on"
 
 Write-Host "`n--- Nameservers (paste these at Namecheap) ---"
@@ -107,5 +107,6 @@ foreach ($n in $ns.result.name_servers) {
 
 Write-Host "`n=== Done ===" -ForegroundColor Green
 Write-Host "Next: Namecheap -> Domain -> Nameservers -> Custom DNS -> paste the 2 Cloudflare NS above."
-Write-Host "GitHub Pages: leave Enforce HTTPS OFF until Cloudflare is on Full (strict) or GitHub cert is ready."
+Write-Host "GitHub Pages: enable Enforce HTTPS in repo Settings > Pages after DNS is grey-clouded and cert checkmark appears."
+Write-Host "Cloudflare SSL must be Full (not Flexible) once GitHub has issued its certificate."
 Write-Host "Test in ~15 min: https://$Domain"
