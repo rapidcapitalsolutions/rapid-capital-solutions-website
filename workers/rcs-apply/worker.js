@@ -13,7 +13,7 @@
  */
 
 const CORS = {
-  'Access-Control-Allow-Origin': 'https://rapidcapitalsolutions.com',
+  'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
 };
@@ -32,7 +32,11 @@ export default {
     }
 
     const url = new URL(request.url);
-    const path = url.pathname.replace(/\/+$/, '') || '/';
+    // Support both api.domain.com/apply and domain.com/api/apply
+    let path = url.pathname.replace(/\/+$/, '') || '/';
+    if (!path.startsWith('/api/')) {
+      path = '/api' + (path === '/' ? '/health' : path);
+    }
 
     try {
       if (request.method === 'GET' && path === '/api/health') {
