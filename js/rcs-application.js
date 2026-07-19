@@ -91,7 +91,7 @@
       owner_name: ownerName,
       owner_dob: raw.owner_dob || '',
       owner_ssn: raw.owner_ssn || '',
-      owner_ownership: raw.owner_ownership || '100',
+      owner_ownership: raw.owner_ownership || '',
       owner_address: raw.owner_address || raw.street || '',
       owner_city: raw.owner_city || raw.city || '',
       owner_state: raw.owner_state || raw.state || '',
