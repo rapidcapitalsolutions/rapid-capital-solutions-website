@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=13">
+  <link rel="stylesheet" href="css/styles.css?v=14">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -67,21 +67,29 @@
       <div class="container">
         <div class="eyebrow">Secure Application</div>
         <h1>Apply for business funding</h1>
-        <p class="page-lead">Complete the full funding application, then electronically sign. A branded PDF is emailed to our team the moment you finish.</p>
+        <p class="page-lead">Complete applications only — including <strong>4 months</strong> of business bank statements. We review businesses that meet our minimums, then you e-sign a branded PDF for our funding team.</p>
       </div>
     </section>
 
     <section class="apply-page">
       <div class="container apply-layout">
         <aside class="apply-info">
+          <h2>Do you qualify?</h2>
+          <p class="apply-qualify-lead">We only review complete files. Incomplete apps cannot continue to e-sign.</p>
+          <ul class="apply-qualify-list">
+            <li><strong>6+ months</strong> in business</li>
+            <li><strong>$120,000+</strong> annual gross sales (about $10K+/mo deposits)</li>
+            <li><strong>Business checking</strong> account in the company name</li>
+            <li><strong>4 months</strong> of recent business bank statements (required upload)</li>
+          </ul>
           <h2>What happens next</h2>
           <ol class="apply-steps">
-            <li><strong>Submit</strong> — your application is saved securely.</li>
-            <li><strong>E-sign</strong> — review disclosures and adopt your signature on the next screen.</li>
-            <li><strong>PDF delivered</strong> — a branded signed PDF goes to our submissions inbox instantly.</li>
-            <li><strong>Review</strong> — a specialist matches programs and contacts you with options.</li>
+            <li><strong>Complete</strong> — fill every required field and upload 4 months of statements.</li>
+            <li><strong>E-sign</strong> — review and adopt your signature.</li>
+            <li><strong>PDF delivered</strong> — branded signed package goes to our team instantly.</li>
+            <li><strong>Review</strong> — a specialist contacts qualified applicants with options.</li>
           </ol>
-          <p class="apply-note">Soft credit pull on many programs. No obligation to proceed. Bank statements can be sent securely after you sign.</p>
+          <p class="apply-note">Soft credit pull on many programs. No obligation to proceed after review.</p>
         </aside>
 
         <div class="apply-form-wrap">
@@ -289,13 +297,13 @@
                   <label for="annual_revenue">Estimated gross annual revenue *</label>
                   <select id="annual_revenue" name="annual_revenue" required>
                     <option value="">Select range</option>
-                    <option value="120000">Under $120,000</option>
-                    <option value="300000">$120,000 – $300,000</option>
-                    <option value="600000">$300,000 – $600,000</option>
-                    <option value="1200000">$600,000 – $1.2M</option>
-                    <option value="3000000">$1.2M – $3M</option>
-                    <option value="5000000">$3M+</option>
+                    <option value="120000">$120,000 – $300,000</option>
+                    <option value="300000">$300,000 – $600,000</option>
+                    <option value="600000">$600,000 – $1.2M</option>
+                    <option value="1200000">$1.2M – $3M</option>
+                    <option value="3000000">$3M+</option>
                   </select>
+                  <p class="form-hint">Minimum for review: $120,000 annual gross sales.</p>
                 </div>
               </div>
               <div class="form-row">
@@ -333,27 +341,21 @@
                 </div>
               </div>
 
-              <div class="form-group">
-                <span class="form-label-text">Bank / credit card statements</span>
-                <p class="form-hint" style="margin-bottom:0.65rem">Upload the last 3–4 months of business bank statements (and CC statements if applicable). PDF, JPG, PNG, or DOC — up to 8 files, 4&nbsp;MB each.</p>
-                <input type="file" id="statement_files" name="statement_files" multiple accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.doc,.docx,.xls,.xlsx,.csv,application/pdf,image/*">
+              <div class="form-group form-group--required-upload">
+                <span class="form-label-text">Business bank statements (last 4 months) *</span>
+                <p class="form-hint" style="margin-bottom:0.65rem">Upload <strong>at least 4 files</strong> — one for each of the last 4 months of business bank statements. PDF preferred (JPG/PNG/DOC also OK). Max 8 files, 4&nbsp;MB each. You cannot continue to e-sign without these.</p>
+                <input type="file" id="statement_files" name="statement_files" multiple required accept=".pdf,.jpg,.jpeg,.png,.gif,.webp,.doc,.docx,.xls,.xlsx,.csv,application/pdf,image/*">
                 <ul id="statement-file-list" class="file-list" hidden></ul>
+                <p id="statement-count-hint" class="form-hint statement-count-hint">0 of 4 months uploaded</p>
               </div>
 
-              <div class="form-group">
-                <span class="form-label-text">Will you also send statements later by email? *</span>
-                <div class="radio-row" role="radiogroup">
-                  <label class="radio-chip"><input type="radio" name="submit_bank_stmts" value="Uploaded with app" required id="stmts_uploaded"> Uploading now</label>
-                  <label class="radio-chip"><input type="radio" name="submit_bank_stmts" value="Yes later"> Yes, later</label>
-                  <label class="radio-chip"><input type="radio" name="submit_bank_stmts" value="No"> No / N/A</label>
-                </div>
-              </div>
+              <input type="hidden" name="submit_bank_stmts" id="submit_bank_stmts" value="Uploaded with app — 4 months required">
 
               <div class="form-group">
-                <span class="form-label-text">Including credit card statements? *</span>
+                <span class="form-label-text">Also including credit card statements? *</span>
                 <div class="radio-row" role="radiogroup">
                   <label class="radio-chip"><input type="radio" name="submit_cc_stmts" value="No" required> No</label>
-                  <label class="radio-chip"><input type="radio" name="submit_cc_stmts" value="Yes"> Yes</label>
+                  <label class="radio-chip"><input type="radio" name="submit_cc_stmts" value="Yes"> Yes (include in upload above)</label>
                 </div>
               </div>
 
@@ -368,21 +370,21 @@
               <div id="advance-details" class="advance-details" hidden>
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="current_advance_balance">Current advance balance</label>
+                    <label for="current_advance_balance">Current advance balance *</label>
                     <input type="text" id="current_advance_balance" name="current_advance_balance" inputmode="numeric" placeholder="$">
                   </div>
                   <div class="form-group">
-                    <label for="current_advance_daily">Daily / ACH payment</label>
+                    <label for="current_advance_daily">Daily / ACH payment *</label>
                     <input type="text" id="current_advance_daily" name="current_advance_daily" inputmode="numeric" placeholder="$">
                   </div>
                 </div>
                 <div class="form-row">
                   <div class="form-group">
-                    <label for="current_advance_holder">Current advance held with</label>
+                    <label for="current_advance_holder">Current advance held with *</label>
                     <input type="text" id="current_advance_holder" name="current_advance_holder" placeholder="Lender / funder name">
                   </div>
                   <div class="form-group">
-                    <label for="current_advance_date">Funding date of current advance</label>
+                    <label for="current_advance_date">Funding date of current advance *</label>
                     <input type="date" id="current_advance_date" name="current_advance_date">
                   </div>
                 </div>

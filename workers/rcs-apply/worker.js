@@ -97,12 +97,18 @@ async function handleApply(request, env) {
   const ip = request.headers.get('cf-connecting-ip') || '';
   const ua = request.headers.get('user-agent') || '';
 
+  if (documents.length < 4) {
+    return json({
+      ok: false,
+      error: 'bank_statements_required',
+      detail: 'Upload at least 4 months of business bank statements before continuing to e-sign.',
+    }, 400);
+  }
+
   if (documents.length) {
     fields.statement_files_count = String(documents.length);
     fields.statement_file_names = documents.map((d) => d.filename).join(', ');
-    if (!fields.submit_bank_stmts || fields.submit_bank_stmts === 'Yes') {
-      fields.submit_bank_stmts = 'Uploaded with app';
-    }
+    fields.submit_bank_stmts = 'Uploaded with app — 4 months required';
   }
 
   const record = {
@@ -516,6 +522,7 @@ function maskDl(dl) {
 }
 
 const MAX_DOCS = 8;
+const MIN_DOCS = 4;
 const MAX_DOC_BYTES = 4 * 1024 * 1024;
 const ALLOWED_DOC = /\.(pdf|jpe?g|png|gif|webp|docx?|xlsx?|csv)$/i;
 
@@ -523,6 +530,9 @@ function normalizeDocuments(raw) {
   if (!raw) return [];
   if (!Array.isArray(raw)) throw new Error('documents_must_be_array');
   if (raw.length > MAX_DOCS) throw new Error('too_many_documents');
+  if (raw.length > 0 && raw.length < MIN_DOCS) {
+    throw new Error('need_at_least_4_bank_statements');
+  }
   const out = [];
   let total = 0;
   for (const item of raw) {
