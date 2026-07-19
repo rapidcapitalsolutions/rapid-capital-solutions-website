@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=11">
+  <link rel="stylesheet" href="css/styles.css?v=12">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -67,7 +67,7 @@
       <div class="container">
         <div class="eyebrow">Secure Application</div>
         <h1>Apply for business funding</h1>
-        <p class="page-lead">Tell us about your business, then review and electronically sign your application. A signed copy is emailed to our funding team automatically.</p>
+        <p class="page-lead">Complete the full funding application, then electronically sign. A branded PDF is emailed to our team the moment you finish.</p>
       </div>
     </section>
 
@@ -78,10 +78,10 @@
           <ol class="apply-steps">
             <li><strong>Submit</strong> — your application is saved securely.</li>
             <li><strong>E-sign</strong> — review disclosures and adopt your signature on the next screen.</li>
-            <li><strong>Delivered</strong> — the signed package goes to our submissions inbox instantly.</li>
+            <li><strong>PDF delivered</strong> — a branded signed PDF goes to our submissions inbox instantly.</li>
             <li><strong>Review</strong> — a specialist matches programs and contacts you with options.</li>
           </ol>
-          <p class="apply-note">Soft credit pull on many programs. No obligation to proceed.</p>
+          <p class="apply-note">Soft credit pull on many programs. No obligation to proceed. Bank statements can be sent securely after you sign.</p>
         </aside>
 
         <div class="apply-form-wrap">
@@ -107,17 +107,30 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="business_type">Business type</label>
-                  <select id="business_type" name="business_type">
+                  <label for="website">Business website</label>
+                  <input type="url" id="website" name="website" placeholder="https://" autocomplete="url">
+                </div>
+                <div class="form-group">
+                  <label for="business_phone">Business phone *</label>
+                  <input type="tel" id="business_phone" name="business_phone" required autocomplete="tel">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="business_type">Legal entity type *</label>
+                  <select id="business_type" name="business_type" required>
+                    <option value="">Select</option>
                     <option value="LLC">LLC</option>
                     <option value="Corporation">Corporation</option>
+                    <option value="S-Corp">S-Corp</option>
                     <option value="Sole Proprietorship">Sole Proprietorship</option>
                     <option value="Partnership">Partnership</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="ein">Federal Tax ID (EIN)</label>
-                  <input type="text" id="ein" name="ein" inputmode="numeric" autocomplete="off">
+                  <label for="ein">Federal Tax ID (EIN) *</label>
+                  <input type="text" id="ein" name="ein" required inputmode="numeric" placeholder="XX-XXXXXXX" autocomplete="off">
                 </div>
               </div>
               <div class="form-group">
@@ -131,7 +144,7 @@
                 </div>
                 <div class="form-group">
                   <label for="state">State *</label>
-                  <input type="text" id="state" name="state" required maxlength="2" autocomplete="address-level1">
+                  <input type="text" id="state" name="state" required maxlength="2" autocomplete="address-level1" placeholder="FL">
                 </div>
                 <div class="form-group">
                   <label for="zip">ZIP *</label>
@@ -140,18 +153,22 @@
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="industry">Industry / description</label>
-                  <input type="text" id="industry" name="industry" placeholder="e.g. Restaurant, Trucking">
+                  <label for="industry">Industry type *</label>
+                  <input type="text" id="industry" name="industry" required placeholder="e.g. Restaurant, Trucking, Construction">
                 </div>
                 <div class="form-group">
-                  <label for="date_started">Business start date</label>
-                  <input type="date" id="date_started" name="date_started">
+                  <label for="date_started">Business start date *</label>
+                  <input type="date" id="date_started" name="date_started" required>
                 </div>
+              </div>
+              <div class="form-group">
+                <label for="state_of_organization">State of organization</label>
+                <input type="text" id="state_of_organization" name="state_of_organization" maxlength="2" placeholder="Same as business state if blank">
               </div>
             </fieldset>
 
             <fieldset>
-              <legend>Owner information</legend>
+              <legend>Primary owner information</legend>
               <div class="form-row">
                 <div class="form-group">
                   <label for="owner_first">First name *</label>
@@ -168,18 +185,86 @@
                   <input type="email" id="owner_email" name="owner_email" required autocomplete="email">
                 </div>
                 <div class="form-group">
-                  <label for="owner_phone">Mobile phone *</label>
+                  <label for="owner_phone">Cell phone *</label>
                   <input type="tel" id="owner_phone" name="owner_phone" required autocomplete="tel">
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="owner_ownership">Ownership %</label>
-                  <input type="text" id="owner_ownership" name="owner_ownership" inputmode="numeric" placeholder="e.g. 100">
+                  <label for="owner_ssn">Social Security Number *</label>
+                  <input type="password" id="owner_ssn" name="owner_ssn" required inputmode="numeric" autocomplete="off" placeholder="XXX-XX-XXXX" maxlength="11">
+                  <p class="form-hint">Encrypted in transit. Shown masked on the signing screen; full value only on the team PDF.</p>
                 </div>
                 <div class="form-group">
-                  <label for="fico_score">Estimated FICO</label>
-                  <input type="text" id="fico_score" name="fico_score" inputmode="numeric" placeholder="500+">
+                  <label for="owner_dob">Date of birth *</label>
+                  <input type="date" id="owner_dob" name="owner_dob" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="owner_ownership">Ownership % *</label>
+                  <input type="text" id="owner_ownership" name="owner_ownership" required inputmode="numeric" placeholder="e.g. 100">
+                </div>
+                <div class="form-group">
+                  <label for="fico_score">Estimated credit score *</label>
+                  <input type="text" id="fico_score" name="fico_score" required inputmode="numeric" placeholder="e.g. 650">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="owner_dl">Driver&rsquo;s license number *</label>
+                <input type="text" id="owner_dl" name="owner_dl" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="owner_address">Home street address *</label>
+                <input type="text" id="owner_address" name="owner_address" required autocomplete="street-address">
+              </div>
+              <div class="form-row form-row-3">
+                <div class="form-group">
+                  <label for="owner_city">City *</label>
+                  <input type="text" id="owner_city" name="owner_city" required autocomplete="address-level2">
+                </div>
+                <div class="form-group">
+                  <label for="owner_state">State *</label>
+                  <input type="text" id="owner_state" name="owner_state" required maxlength="2" autocomplete="address-level1">
+                </div>
+                <div class="form-group">
+                  <label for="owner_zip">ZIP *</label>
+                  <input type="text" id="owner_zip" name="owner_zip" required inputmode="numeric" autocomplete="postal-code">
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Second owner <span class="legend-optional">(optional)</span></legend>
+              <p class="form-hint" style="margin-top:0">Add if another owner holds 20%+ equity.</p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="owner2_first">First name</label>
+                  <input type="text" id="owner2_first" name="owner2_first" autocomplete="off">
+                </div>
+                <div class="form-group">
+                  <label for="owner2_last">Last name</label>
+                  <input type="text" id="owner2_last" name="owner2_last" autocomplete="off">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="owner2_ownership">Ownership %</label>
+                  <input type="text" id="owner2_ownership" name="owner2_ownership" inputmode="numeric">
+                </div>
+                <div class="form-group">
+                  <label for="owner2_phone">Phone</label>
+                  <input type="tel" id="owner2_phone" name="owner2_phone">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="owner2_email">Email</label>
+                  <input type="email" id="owner2_email" name="owner2_email">
+                </div>
+                <div class="form-group">
+                  <label for="owner2_ssn">SSN</label>
+                  <input type="password" id="owner2_ssn" name="owner2_ssn" inputmode="numeric" autocomplete="off" maxlength="11">
                 </div>
               </div>
             </fieldset>
@@ -188,8 +273,8 @@
               <legend>Funding request</legend>
               <div class="form-row">
                 <div class="form-group">
-                  <label for="funding_requested">Amount needed</label>
-                  <select id="funding_requested" name="funding_requested">
+                  <label for="funding_requested">Requested funding amount *</label>
+                  <select id="funding_requested" name="funding_requested" required>
                     <option value="">Select range</option>
                     <option value="25000">Under $25,000</option>
                     <option value="50000">$25,000 – $50,000</option>
@@ -201,30 +286,109 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="annual_revenue">Annual gross revenue</label>
-                  <select id="annual_revenue" name="annual_revenue">
+                  <label for="annual_revenue">Estimated gross annual revenue *</label>
+                  <select id="annual_revenue" name="annual_revenue" required>
                     <option value="">Select range</option>
                     <option value="120000">Under $120,000</option>
                     <option value="300000">$120,000 – $300,000</option>
                     <option value="600000">$300,000 – $600,000</option>
                     <option value="1200000">$600,000 – $1.2M</option>
-                    <option value="3000000">$1.2M+</option>
+                    <option value="3000000">$1.2M – $3M</option>
+                    <option value="5000000">$3M+</option>
                   </select>
                 </div>
               </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="avg_bank_balance">Average bank balance *</label>
+                  <input type="text" id="avg_bank_balance" name="avg_bank_balance" required inputmode="numeric" placeholder="e.g. 25000">
+                </div>
+                <div class="form-group">
+                  <label for="monthly_cc_volume">Monthly credit card volume</label>
+                  <input type="text" id="monthly_cc_volume" name="monthly_cc_volume" inputmode="numeric" placeholder="If applicable">
+                </div>
+              </div>
               <div class="form-group">
-                <label for="purpose_of_funds">Purpose of funds</label>
-                <textarea id="purpose_of_funds" name="purpose_of_funds" rows="3" placeholder="Working capital, expansion, inventory, payroll…"></textarea>
+                <label for="purpose_of_funds">What will you use the funds for? *</label>
+                <textarea id="purpose_of_funds" name="purpose_of_funds" rows="3" required placeholder="Working capital, expansion, inventory, payroll, equipment…"></textarea>
+              </div>
+
+              <div class="form-group">
+                <span class="form-label-text">Any open judgments, bankruptcy, or tax liens? *</span>
+                <div class="radio-row" role="radiogroup" aria-label="Judgments bankruptcy or liens">
+                  <label class="radio-chip"><input type="radio" name="has_liens" value="No" required> No</label>
+                  <label class="radio-chip"><input type="radio" name="has_liens" value="Yes"> Yes</label>
+                </div>
+              </div>
+              <div class="form-group" id="liens_detail_wrap" hidden>
+                <label for="liens_detail">Please explain</label>
+                <textarea id="liens_detail" name="liens_detail" rows="2"></textarea>
+              </div>
+
+              <div class="form-group">
+                <span class="form-label-text">Have you applied for an ERC grant? *</span>
+                <div class="radio-row" role="radiogroup">
+                  <label class="radio-chip"><input type="radio" name="erc_grant" value="No" required> No</label>
+                  <label class="radio-chip"><input type="radio" name="erc_grant" value="Yes"> Yes</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <span class="form-label-text">Will you submit bank statements after signing? *</span>
+                <div class="radio-row" role="radiogroup">
+                  <label class="radio-chip"><input type="radio" name="submit_bank_stmts" value="Yes" required> Yes</label>
+                  <label class="radio-chip"><input type="radio" name="submit_bank_stmts" value="No"> No / later</label>
+                </div>
+                <p class="form-hint">Most programs need the last 3–4 months of business bank statements. Our team will send a secure upload link.</p>
+              </div>
+
+              <div class="form-group">
+                <span class="form-label-text">Will you submit credit card statements? *</span>
+                <div class="radio-row" role="radiogroup">
+                  <label class="radio-chip"><input type="radio" name="submit_cc_stmts" value="No" required> No</label>
+                  <label class="radio-chip"><input type="radio" name="submit_cc_stmts" value="Yes"> Yes</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <span class="form-label-text">Do you have a current advance / MCA balance? *</span>
+                <div class="radio-row" role="radiogroup">
+                  <label class="radio-chip"><input type="radio" name="has_current_advance" value="No" required id="advance_no"> No</label>
+                  <label class="radio-chip"><input type="radio" name="has_current_advance" value="Yes" id="advance_yes"> Yes</label>
+                </div>
+              </div>
+
+              <div id="advance-details" class="advance-details" hidden>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="current_advance_balance">Current advance balance</label>
+                    <input type="text" id="current_advance_balance" name="current_advance_balance" inputmode="numeric" placeholder="$">
+                  </div>
+                  <div class="form-group">
+                    <label for="current_advance_daily">Daily / ACH payment</label>
+                    <input type="text" id="current_advance_daily" name="current_advance_daily" inputmode="numeric" placeholder="$">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="current_advance_holder">Current advance held with</label>
+                    <input type="text" id="current_advance_holder" name="current_advance_holder" placeholder="Lender / funder name">
+                  </div>
+                  <div class="form-group">
+                    <label for="current_advance_date">Funding date of current advance</label>
+                    <input type="date" id="current_advance_date" name="current_advance_date">
+                  </div>
+                </div>
               </div>
             </fieldset>
 
             <div class="form-consent">
               <label>
                 <input type="checkbox" name="consent" required value="1">
-                I agree to receive calls, emails, and texts from Rapid Capital Solutions regarding my funding inquiry. After submit I will electronically sign my application. I have read the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms</a>.
+                I am authorized to apply on behalf of this business. I agree to receive calls, emails, and texts from Rapid Capital Solutions regarding my funding inquiry. After submit I will electronically sign my application. I have read the <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms</a>.
               </label>
             </div>
-            <button type="submit" class="btn btn-copper btn-lg" style="width:100%">Submit Application</button>
+            <button type="submit" class="btn btn-copper btn-lg" style="width:100%">Continue to E-Sign</button>
           </form>
         </div>
       </div>

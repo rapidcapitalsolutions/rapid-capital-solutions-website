@@ -1,6 +1,6 @@
 /**
  * Rapid Capital Solutions — apply + e-sign Worker
- * Route: rapidcapitalsolutions.com/api/*
+ * Route: api.rapidcapitalsolutions.com/*
  *
  * Secrets:
  *   RESEND_API_KEY     — required for email (https://resend.com)
@@ -11,6 +11,8 @@
  * Bindings:
  *   RCS_APPS (KV)
  */
+
+import { buildApplicationPdf, maskSsn, money } from './pdf.js';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -23,6 +25,7 @@ const DISCLOSURES = [
   'Accuracy — I certify that the information provided is true and complete to the best of my knowledge.',
   'Credit Authorization — I authorize Rapid Capital Solutions and its funding partners to obtain consumer and/or commercial credit reports in connection with this application (soft pull where applicable).',
   'Communication — I consent to be contacted by phone, email, and text regarding this inquiry. Message and data rates may apply.',
+  'Authorization to share — I authorize Rapid Capital Solutions to transmit this application and related information to funding partners for the purpose of evaluating financing options.',
 ];
 
 export default {
@@ -32,7 +35,6 @@ export default {
     }
 
     const url = new URL(request.url);
-    // Support both api.domain.com/apply and domain.com/api/apply
     let path = url.pathname.replace(/\/+$/, '') || '/';
     if (!path.startsWith('/api/')) {
       path = '/api' + (path === '/' ? '/health' : path);
@@ -44,6 +46,7 @@ export default {
           ok: true,
           service: 'rcs-apply',
           email_configured: Boolean(env.RESEND_API_KEY),
+          pdf: true,
         });
       }
 
@@ -157,6 +160,8 @@ async function handleGetSign(token, env) {
     preview: {
       business_name: f.legal_name || '',
       dba: f.dba || '',
+      website: f.website || '',
+      business_phone: f.business_phone || '',
       business_type: f.business_type || '',
       industry: f.industry || '',
       address: [f.street, f.city, f.state, f.zip].filter(Boolean).join(', '),
@@ -164,12 +169,25 @@ async function handleGetSign(token, env) {
       owner_name: f.owner_name || '',
       owner_email: f.owner_email || '',
       owner_phone: f.owner_phone || '',
+      owner_dob: f.owner_dob || '',
+      owner_ssn: f.owner_ssn ? maskSsn(f.owner_ssn) : '',
+      owner_dl: f.owner_dl ? maskDl(f.owner_dl) : '',
+      owner_home: [f.owner_address, f.owner_city, f.owner_state, f.owner_zip].filter(Boolean).join(', '),
       ownership: f.owner_ownership || '',
+      owner2_name: f.owner2_name || '',
       funding_requested: f.funding_requested || '',
       annual_revenue: f.annual_revenue || '',
+      avg_bank_balance: f.avg_bank_balance || '',
+      monthly_cc_volume: f.monthly_cc_volume || '',
       purpose: f.purpose_of_funds || '',
       fico_score: f.fico_score || '',
       date_started: f.date_started || '',
+      has_liens: f.has_liens || '',
+      erc_grant: f.erc_grant || '',
+      submit_bank_stmts: f.submit_bank_stmts || '',
+      has_current_advance: f.has_current_advance || '',
+      current_advance_balance: f.current_advance_balance || '',
+      current_advance_holder: f.current_advance_holder || '',
     },
   });
 }
@@ -201,7 +219,7 @@ async function handlePostSign(request, token, env) {
   if (!signatureDataUrl.startsWith('data:image/png;base64,')) {
     return json({ ok: false, error: 'signature_required' }, 400);
   }
-  if (!consents.electronic || !consents.accuracy || !consents.credit || !consents.communication) {
+  if (!consents.electronic || !consents.accuracy || !consents.credit || !consents.communication || !consents.share) {
     return json({ ok: false, error: 'all_consents_required' }, 400);
   }
 
@@ -232,23 +250,35 @@ async function handlePostSign(request, token, env) {
   const sigB64 = signatureDataUrl.replace(/^data:image\/png;base64,/, '');
   const certificateHtml = certificateHtmlDoc(record);
 
+  let pdfAttachment = null;
+  try {
+    pdfAttachment = await buildApplicationPdf(record);
+  } catch (err) {
+    console.log('PDF_BUILD_FAILED', err.message || err);
+  }
+
+  const attachments = [
+    {
+      filename: `${record.application_id}-signature.png`,
+      content: sigB64,
+    },
+    {
+      filename: `${record.application_id}-certificate.html`,
+      content: btoa(unescape(encodeURIComponent(certificateHtml))),
+    },
+  ];
+  if (pdfAttachment) {
+    attachments.unshift(pdfAttachment);
+  }
+
   let emailSent = false;
   try {
     await sendEmail(env, {
       to: notify,
       subject: `[RCS] SIGNED application — ${record.fields.legal_name} [${record.application_id}]`,
-      html: signedEmailHtml(record),
+      html: signedEmailHtml(record, Boolean(pdfAttachment)),
       text: signedEmailText(record),
-      attachments: [
-        {
-          filename: `${record.application_id}-signature.png`,
-          content: sigB64,
-        },
-        {
-          filename: `${record.application_id}-certificate.html`,
-          content: btoa(unescape(encodeURIComponent(certificateHtml))),
-        },
-      ],
+      attachments,
     });
     emailSent = true;
   } catch (err) {
@@ -257,11 +287,15 @@ async function handlePostSign(request, token, env) {
 
   if (applicant) {
     try {
+      const applicantAttachments = pdfAttachment
+        ? [{ filename: pdfAttachment.filename, content: pdfAttachment.content }]
+        : [];
       await sendEmail(env, {
         to: applicant,
         subject: `Application received — Rapid Capital Solutions [${record.application_id}]`,
-        html: applicantConfirmHtml(record),
+        html: applicantConfirmHtml(record, Boolean(pdfAttachment)),
         text: `Thank you. We received your signed application ${record.application_id}. A funding specialist will contact you shortly.`,
+        attachments: applicantAttachments,
       });
     } catch (err) {
       console.log('APPLICANT_EMAIL_FAILED', err.message || err);
@@ -274,6 +308,7 @@ async function handlePostSign(request, token, env) {
     application_id: record.application_id,
     signed_at: now,
     email_sent: emailSent,
+    pdf_attached: Boolean(pdfAttachment),
   });
 }
 
@@ -321,18 +356,18 @@ function pendingEmailHtml(record, signUrl) {
     <p><strong>Business:</strong> ${esc(f.legal_name)}</p>
     <p><strong>Owner:</strong> ${esc(f.owner_name)} &lt;${esc(f.owner_email)}&gt;</p>
     <p><strong>Phone:</strong> ${esc(f.owner_phone)}</p>
-    <p><strong>Amount:</strong> ${esc(f.funding_requested)}</p>
+    <p><strong>Amount:</strong> ${esc(money(f.funding_requested))}</p>
     <p><strong>Sign link:</strong> <a href="${esc(signUrl)}">${esc(signUrl)}</a></p>
     <hr>
-    <pre style="font-family:monospace;white-space:pre-wrap">${esc(formatFields(f))}</pre>
+    <pre style="font-family:monospace;white-space:pre-wrap">${esc(formatFields(f, true))}</pre>
   `;
 }
 
 function pendingEmailText(record, signUrl) {
-  return `New RCS application ${record.application_id}\nSign: ${signUrl}\n\n${formatFields(record.fields)}`;
+  return `New RCS application ${record.application_id}\nSign: ${signUrl}\n\n${formatFields(record.fields, true)}`;
 }
 
-function signedEmailHtml(record) {
+function signedEmailHtml(record, hasPdf) {
   const f = record.fields;
   const s = record.signature;
   return `
@@ -342,22 +377,24 @@ function signedEmailHtml(record) {
     <p><strong>Signer:</strong> ${esc(s.typed_name)}</p>
     <p><strong>IP:</strong> ${esc(s.ip)}</p>
     <p><strong>Document hash:</strong> ${esc(s.document_hash)}</p>
+    ${hasPdf ? '<p><strong>Attached:</strong> Branded RCS funding application PDF</p>' : ''}
     <p><img src="${esc(s.signature_data_url)}" alt="Signature" style="max-width:320px;border:1px solid #ddd;background:#fff;padding:8px" /></p>
     <hr>
     <h3>Application details</h3>
-    <pre style="font-family:monospace;white-space:pre-wrap">${esc(formatFields(f))}</pre>
+    <pre style="font-family:monospace;white-space:pre-wrap">${esc(formatFields(f, false))}</pre>
   `;
 }
 
 function signedEmailText(record) {
   const s = record.signature;
-  return `SIGNED ${record.application_id}\nSigner: ${s.typed_name}\nAt: ${s.signed_at}\nIP: ${s.ip}\nHash: ${s.document_hash}\n\n${formatFields(record.fields)}`;
+  return `SIGNED ${record.application_id}\nSigner: ${s.typed_name}\nAt: ${s.signed_at}\nIP: ${s.ip}\nHash: ${s.document_hash}\n\n${formatFields(record.fields, false)}`;
 }
 
-function applicantConfirmHtml(record) {
+function applicantConfirmHtml(record, hasPdf) {
   return `
     <p>Hi ${esc((record.fields.owner_name || '').split(' ')[0] || 'there')},</p>
     <p>We received your signed funding application <strong>${esc(record.application_id)}</strong> for <strong>${esc(record.fields.legal_name)}</strong>.</p>
+    ${hasPdf ? '<p>A copy of your signed application PDF is attached for your records.</p>' : ''}
     <p>A Rapid Capital Solutions specialist will review your file and contact you shortly — usually within one business day.</p>
     <p>Questions? Email <a href="mailto:info@rapidcapitalsolutions.com">info@rapidcapitalsolutions.com</a>.</p>
     <p>— Rapid Capital Solutions</p>
@@ -390,23 +427,46 @@ function certificateHtmlDoc(record) {
   </body></html>`;
 }
 
-function formatFields(f) {
+function formatFields(f, maskSensitive) {
+  const ssn = maskSensitive ? maskSsn(f.owner_ssn) : f.owner_ssn;
+  const ssn2 = maskSensitive ? maskSsn(f.owner2_ssn) : f.owner2_ssn;
   const rows = [
     ['Business', f.legal_name],
     ['DBA', f.dba],
+    ['Website', f.website],
+    ['Business phone', f.business_phone],
     ['Type', f.business_type],
     ['Industry', f.industry],
-    ['EIN', f.ein],
+    ['EIN', maskSensitive && f.ein ? maskEin(f.ein) : f.ein],
     ['Address', [f.street, f.city, f.state, f.zip].filter(Boolean).join(', ')],
     ['Start date', f.date_started],
     ['Owner', f.owner_name],
     ['Owner email', f.owner_email],
     ['Owner phone', f.owner_phone],
+    ['Owner DOB', f.owner_dob],
+    ['Owner SSN', ssn],
+    ['Owner DL', maskSensitive && f.owner_dl ? maskDl(f.owner_dl) : f.owner_dl],
+    ['Owner home', [f.owner_address, f.owner_city, f.owner_state, f.owner_zip].filter(Boolean).join(', ')],
     ['Ownership %', f.owner_ownership],
-    ['FICO', f.fico_score],
-    ['Funding requested', f.funding_requested],
-    ['Annual revenue', f.annual_revenue],
+    ['Credit score', f.fico_score],
+    ['Second owner', f.owner2_name],
+    ['Second owner %', f.owner2_ownership],
+    ['Second owner SSN', ssn2],
+    ['Funding requested', money(f.funding_requested)],
+    ['Annual revenue', money(f.annual_revenue)],
+    ['Avg bank balance', money(f.avg_bank_balance)],
+    ['Monthly CC volume', f.monthly_cc_volume ? money(f.monthly_cc_volume) : ''],
     ['Purpose', f.purpose_of_funds],
+    ['Judgments/liens', f.has_liens],
+    ['Liens detail', f.liens_detail],
+    ['ERC grant', f.erc_grant],
+    ['Bank statements', f.submit_bank_stmts],
+    ['CC statements', f.submit_cc_stmts],
+    ['Current advance', f.has_current_advance],
+    ['Advance balance', f.current_advance_balance],
+    ['Advance daily', f.current_advance_daily],
+    ['Advance holder', f.current_advance_holder],
+    ['Advance date', f.current_advance_date],
     ['Application ID', f.application_id],
     ['Source', f.source],
   ];
@@ -417,6 +477,12 @@ function maskEin(ein) {
   const d = String(ein).replace(/\D/g, '');
   if (d.length < 4) return '***';
   return '**-***' + d.slice(-4);
+}
+
+function maskDl(dl) {
+  const s = String(dl || '');
+  if (s.length < 4) return '****';
+  return '*'.repeat(Math.max(0, s.length - 4)) + s.slice(-4);
 }
 
 function esc(s) {

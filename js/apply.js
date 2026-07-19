@@ -29,6 +29,29 @@
     }
   } catch (_) { /* ignore */ }
 
+  const advanceDetails = document.getElementById('advance-details');
+  function syncAdvance() {
+    const yes = form.querySelector('input[name="has_current_advance"][value="Yes"]');
+    if (!advanceDetails) return;
+    const show = yes && yes.checked;
+    advanceDetails.hidden = !show;
+  }
+  form.querySelectorAll('input[name="has_current_advance"]').forEach((el) => {
+    el.addEventListener('change', syncAdvance);
+  });
+  syncAdvance();
+
+  const liensWrap = document.getElementById('liens_detail_wrap');
+  function syncLiens() {
+    const yes = form.querySelector('input[name="has_liens"][value="Yes"]');
+    if (!liensWrap) return;
+    liensWrap.hidden = !(yes && yes.checked);
+  }
+  form.querySelectorAll('input[name="has_liens"]').forEach((el) => {
+    el.addEventListener('change', syncLiens);
+  });
+  syncLiens();
+
   function setStatus(msg, type) {
     if (!statusEl) return;
     statusEl.textContent = msg;
@@ -70,7 +93,7 @@
       mailtoFallback(fields);
       if (btn) {
         btn.disabled = false;
-        btn.textContent = 'Submit Application';
+        btn.textContent = 'Continue to E-Sign';
       }
       return;
     }
@@ -106,7 +129,7 @@
     } finally {
       if (btn) {
         btn.disabled = false;
-        btn.textContent = 'Submit Application';
+        btn.textContent = 'Continue to E-Sign';
       }
     }
   });

@@ -1673,6 +1673,53 @@ section.alt { background: var(--white); }
   padding: 0 0.5rem;
   color: var(--ink);
 }
+.apply-form .legend-optional {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--mist);
+}
+.apply-form .form-hint {
+  margin: 0.35rem 0 0;
+  font-size: 0.8rem;
+  color: var(--mist);
+  line-height: 1.4;
+}
+.apply-form .form-label-text {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: var(--ink);
+}
+.apply-form .radio-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.apply-form .radio-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin: 0;
+}
+.apply-form .radio-chip:has(input:checked) {
+  border-color: var(--copper);
+  background: var(--copper-glow);
+}
+.apply-form .advance-details {
+  margin: 0.5rem 0 1rem;
+  padding: 1rem 1.1rem 0.25rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+}
 .apply-status {
   padding: 1rem;
   border-radius: var(--radius);

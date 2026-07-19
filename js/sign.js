@@ -114,19 +114,34 @@
     const rows = [
       ['Legal business name', preview.business_name],
       ['DBA', preview.dba],
+      ['Website', preview.website],
+      ['Business phone', preview.business_phone],
       ['Entity type', preview.business_type],
       ['Industry', preview.industry],
       ['Business address', preview.address],
       ['EIN', preview.ein],
-      ['Time in business (start)', preview.date_started],
+      ['Business start date', preview.date_started],
       ['Owner', preview.owner_name],
       ['Owner email', preview.owner_email],
       ['Owner phone', preview.owner_phone],
+      ['Owner DOB', preview.owner_dob],
+      ['Owner SSN', preview.owner_ssn],
+      ['Driver license', preview.owner_dl],
+      ['Owner home address', preview.owner_home],
       ['Ownership %', preview.ownership],
-      ['Estimated FICO', preview.fico_score],
+      ['Estimated credit score', preview.fico_score],
+      ['Second owner', preview.owner2_name],
       ['Funding requested', money(preview.funding_requested)],
       ['Annual revenue', money(preview.annual_revenue)],
+      ['Average bank balance', money(preview.avg_bank_balance)],
+      ['Monthly CC volume', preview.monthly_cc_volume ? money(preview.monthly_cc_volume) : ''],
       ['Purpose of funds', preview.purpose],
+      ['Judgments / liens', preview.has_liens],
+      ['ERC grant', preview.erc_grant],
+      ['Bank statements', preview.submit_bank_stmts],
+      ['Current advance', preview.has_current_advance],
+      ['Advance balance', preview.current_advance_balance ? money(preview.current_advance_balance) : ''],
+      ['Advance held with', preview.current_advance_holder],
     ];
     el.preview.innerHTML = rows
       .filter((r) => r[1])
@@ -197,8 +212,9 @@
       accuracy: document.getElementById('c-accuracy').checked,
       credit: document.getElementById('c-credit').checked,
       communication: document.getElementById('c-communication').checked,
+      share: document.getElementById('c-share').checked,
     };
-    if (!consents.electronic || !consents.accuracy || !consents.credit || !consents.communication) {
+    if (!consents.electronic || !consents.accuracy || !consents.credit || !consents.communication || !consents.share) {
       setStatus('Please check all consent boxes.', 'error');
       return;
     }

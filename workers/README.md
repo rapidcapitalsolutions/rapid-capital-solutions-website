@@ -8,8 +8,8 @@ Homegrown e-sign (not DocuSign/ClixSign). Applications land in **submissions@rap
 2. Worker stores the application in KV and emails submissions@ (pending signature)
 3. Browser redirects to `sign.html?t=TOKEN`
 4. Applicant reviews disclosures, draws signature, checks consents
-5. Worker emails **signed package** to submissions@ (details + signature PNG + HTML certificate)
-6. Applicant gets confirmation email
+5. Worker builds a **branded RCS PDF**, then emails the signed package to submissions@ (PDF + signature PNG + HTML certificate)
+6. Applicant gets confirmation email **with the same PDF attached**
 
 ## One-time setup
 
