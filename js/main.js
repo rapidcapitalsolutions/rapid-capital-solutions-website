@@ -9,36 +9,62 @@
     }, { passive: true });
   }
 
+  function closeMenu() {
+    if (!navLinks || !toggle) return;
+    navLinks.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open menu');
+    document.body.classList.remove('nav-open');
+  }
+
+  function openMenu() {
+    if (!navLinks || !toggle) return;
+    navLinks.classList.add('open');
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Close menu');
+    document.body.classList.add('nav-open');
+  }
+
   if (toggle && navLinks) {
     toggle.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', navLinks.classList.contains('open'));
+      if (navLinks.classList.contains('open')) closeMenu();
+      else openMenu();
     });
     navLinks.querySelectorAll('a').forEach((a) => {
-      a.addEventListener('click', () => navLinks.classList.remove('open'));
+      a.addEventListener('click', closeMenu);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
     });
   }
 
-  document.querySelectorAll('.faq-q').forEach((btn) => {
+  document.querySelectorAll('.faq-q').forEach((btn, idx) => {
+    const item = btn.closest('.faq-item');
+    const answer = item && item.querySelector('.faq-a');
+    if (!answer) return;
+    const aid = 'faq-a-' + idx;
+    answer.id = aid;
+    btn.setAttribute('aria-controls', aid);
+    btn.setAttribute('aria-expanded', 'false');
     btn.addEventListener('click', () => {
-      const item = btn.closest('.faq-item');
-      const answer = item.querySelector('.faq-a');
       const isOpen = item.classList.contains('open');
-
       document.querySelectorAll('.faq-item.open').forEach((el) => {
         el.classList.remove('open');
-        el.querySelector('.faq-a').style.maxHeight = null;
+        const a = el.querySelector('.faq-a');
+        const q = el.querySelector('.faq-q');
+        if (a) a.style.maxHeight = null;
+        if (q) q.setAttribute('aria-expanded', 'false');
       });
-
       if (!isOpen) {
         item.classList.add('open');
         answer.style.maxHeight = answer.scrollHeight + 'px';
+        btn.setAttribute('aria-expanded', 'true');
       }
     });
   });
 
   const reveals = document.querySelectorAll('.reveal');
-  if (reveals.length && 'IntersectionObserver' in window) {
+  if (reveals.length && 'IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
@@ -53,15 +79,10 @@
   }
 
   const form = document.getElementById('apply-form');
-  if (form) {
+  if (form && !document.getElementById('rcs-apply-form')) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const data = new FormData(form);
-      const lines = [];
-      data.forEach((v, k) => lines.push(k + ': ' + v));
-      const subject = encodeURIComponent('Funding Inquiry — ' + (data.get('business') || 'New Application'));
-      const body = encodeURIComponent(lines.join('\n'));
-      window.location.href = 'mailto:submissions@rapidcapitalsolutions.com?subject=' + subject + '&body=' + body;
+      window.location.href = 'apply.html';
     });
   }
 })();
