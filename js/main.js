@@ -91,19 +91,21 @@
   const heroApplyBtn = document.getElementById('hero-apply-btn');
   if (heroSlider && heroDisplay) {
     const amounts = [5000, 100000, 250000, 500000, 5000000];
-    const formatAmount = (n) => {
-      if (n >= 1000000) return '$' + (n / 1000000) + 'M';
-      if (n >= 1000) return '$' + Math.round(n / 1000) + 'K';
-      return '$' + n.toLocaleString();
-    };
+    const formatAmount = (n) => '$' + n.toLocaleString('en-US');
+
     const syncHeroAmount = () => {
-      const val = amounts[Number(heroSlider.value)] || amounts[2];
+      const idx = Math.max(0, Math.min(amounts.length - 1, parseInt(heroSlider.value, 10) || 0));
+      const val = amounts[idx];
       heroDisplay.textContent = formatAmount(val);
+      heroSlider.setAttribute('aria-valuenow', String(idx));
+      heroSlider.setAttribute('aria-valuetext', formatAmount(val));
       if (heroApplyBtn) {
         heroApplyBtn.href = 'apply.html?amount=' + encodeURIComponent(String(val));
       }
     };
+
     heroSlider.addEventListener('input', syncHeroAmount);
+    heroSlider.addEventListener('change', syncHeroAmount);
     syncHeroAmount();
   }
 })();

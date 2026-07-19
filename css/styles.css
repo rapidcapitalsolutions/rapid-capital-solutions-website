@@ -516,11 +516,13 @@ section.alt { background: var(--white); }
 }
 .hero-amount-display {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
   font-weight: 600;
   color: var(--ink);
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
+  min-height: 1.2em;
+  white-space: nowrap;
 }
 .hero-slider {
   width: 100%;
