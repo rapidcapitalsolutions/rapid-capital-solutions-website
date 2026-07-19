@@ -594,17 +594,25 @@ section.alt { background: var(--white); }
   cursor: pointer;
 }
 .hero-slider-labels {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.1rem;
-  margin-top: 0.7rem;
-  font-size: 0.65rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 0.55rem;
+  padding: 0 12px; /* same as slider wrap — keeps labels under thumb centers */
+  font-size: 0.62rem;
   font-weight: 600;
   color: var(--mist);
+  letter-spacing: -0.01em;
+}
+.hero-slider-labels span {
+  flex: 0 0 0;
+  width: 0;
+  display: flex;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: visible;
   text-align: center;
 }
-.hero-slider-labels span:first-child { text-align: left; }
-.hero-slider-labels span:last-child { text-align: right; }
 .hero-widget-btn {
   display: flex;
   width: 100%;
@@ -1393,10 +1401,14 @@ section.alt { background: var(--white); }
   gap: 1.25rem;
 }
 .program-card {
+  display: flex;
+  flex-direction: column;
   padding: 1.5rem;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  min-height: 100%;
 }
 .program-icon {
   width: 44px;
@@ -1406,14 +1418,17 @@ section.alt { background: var(--white); }
   color: var(--copper-light);
   display: grid;
   place-items: center;
-  font-size: 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
   margin-bottom: 1rem;
 }
 .program-card h3 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+.program-card h3 a { text-decoration: none; }
+.program-card h3 a:hover { color: var(--copper); }
 .program-card > p { margin: 0 0 1rem; font-size: 0.9rem; color: var(--mist); line-height: 1.6; }
 .program-meta {
   list-style: none;
-  margin: 0;
+  margin: 0 0 1rem;
   padding: 0;
   font-size: 0.82rem;
   color: var(--slate);
@@ -1422,6 +1437,18 @@ section.alt { background: var(--white); }
 }
 .program-meta li { margin-bottom: 0.25rem; }
 .program-meta strong { color: var(--ink); }
+.program-card > p:last-child {
+  margin-top: auto;
+  margin-bottom: 0;
+  padding-top: 0.25rem;
+}
+.program-card > p:last-child a {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--copper);
+  text-decoration: none;
+}
+.program-card > p:last-child a:hover { text-decoration: underline; }
 
 /* ── Contact blocks ── */
 .contact-block {
@@ -1565,7 +1592,7 @@ section.alt { background: var(--white); }
   .cta-banner { padding: 2rem 1.25rem; }
   .form-consent { font-size: 0.875rem; }
   input, select, textarea { font-size: 16px; }
-  .hero-slider-labels { font-size: 0.58rem; }
+  .hero-slider-labels { font-size: 0.55rem; }
 }
 
 @media (max-width: 480px) {
