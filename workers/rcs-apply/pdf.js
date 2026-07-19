@@ -256,14 +256,21 @@ export async function buildApplicationPdf(record) {
   if (s.signature_data_url && s.signature_data_url.startsWith('data:image/png;base64,')) {
     try {
       const b64 = s.signature_data_url.replace(/^data:image\/png;base64,/, '');
-      const pngBytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      const pngBytes = decodeBase64(b64);
       const png = await doc.embedPng(pngBytes);
-      const maxW = 220;
-      const scale = Math.min(1, maxW / png.width);
-      const w = png.width * scale;
-      const h = png.height * scale;
-      ensure(h + 40);
-      page.drawText('Signature image', {
+
+      // Fixed signature box so drawn pads and small test images both read clearly
+      const boxW = 300;
+      const boxH = 110;
+      const pad = 10;
+      const fit = Math.min((boxW - pad * 2) / png.width, (boxH - pad * 2) / png.height);
+      const w = Math.max(1, png.width * fit);
+      const h = Math.max(1, png.height * fit);
+      const imgX = margin + pad + (boxW - pad * 2 - w) / 2;
+      const imgY = y - 8 - boxH + pad + (boxH - pad * 2 - h) / 2;
+
+      ensure(boxH + 36);
+      page.drawText('Signature', {
         x: margin,
         y,
         size: 9,
@@ -273,22 +280,23 @@ export async function buildApplicationPdf(record) {
       y -= 8;
       page.drawRectangle({
         x: margin,
-        y: y - h - 8,
-        width: w + 16,
-        height: h + 16,
-        color: PAPER,
-        borderColor: LINE,
-        borderWidth: 1,
+        y: y - boxH,
+        width: boxW,
+        height: boxH,
+        color: rgb(1, 1, 1),
+        borderColor: COPPER,
+        borderWidth: 1.25,
       });
       page.drawImage(png, {
-        x: margin + 8,
-        y: y - h - 0,
+        x: imgX,
+        y: imgY,
         width: w,
         height: h,
       });
-      y -= h + 28;
+      y -= boxH + 20;
     } catch (err) {
-      row('Signature', '(embedded image unavailable)');
+      console.log('PDF_SIGNATURE_EMBED_FAILED', err && err.message ? err.message : err);
+      row('Signature', '(image could not be embedded — see PNG attachment)');
     }
   }
 
@@ -312,6 +320,13 @@ export async function buildApplicationPdf(record) {
     filename: `${record.application_id || 'RCS'}-funding-application.pdf`,
     content: uint8ToBase64(pdfBytes),
   };
+}
+
+function decodeBase64(b64) {
+  const binary = atob(b64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
 }
 
 export { maskSsn, money };
