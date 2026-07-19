@@ -1,44 +1,58 @@
 # Rapid Capital Solutions — Email signatures
 
-Outlook signatures inspired by Fidelity’s stacked layout (logo → name → title → Direct → email → company → website), restyled for RCS (ink + copper).
+Outlook signatures (Fidelity-style stack: logo → name → title → contact → company). RCS ink + copper.
 
-## Can `m365` CLI set signatures?
+## Titles (current)
 
-**No.** Microsoft Graph / `m365 outlook mailbox settings` has **no signature field**.  
-Signatures for Outlook on the web are set with **Exchange Online PowerShell**:
+| Person / mailbox | Title |
+|------------------|--------|
+| Vincent Maccarone (`Vincent@`) | **Chief Executive Officer** |
+| Nicholas Gianni (`nicky@`) | **Chief Executive Officer** |
+| New advisors / other people | **Funding Advisor** |
+| Shared (`info@`, `submissions@`, `admin@`) | Funding Team (shared inbox) |
 
-```powershell
-Set-MailboxMessageConfiguration -Identity user@... -SignatureHtml '...' -AutoAddSignature $true
-```
+## How compose signatures work (the method that works)
 
-## Push via PowerShell (one command)
+Microsoft Graph / `m365` **cannot** set signatures. New Outlook / OWA only inject the sig **in compose** when:
 
-1. Open **Windows PowerShell** on this PC (not the agent — needs your browser login).
-2. Run:
+1. Org: `Set-OrganizationConfig -PostponeRoamingSignaturesUntilLater $true`
+2. Per mailbox: `Set-MailboxMessageConfiguration` with `SignatureHtml` + `SignatureHtmlBody` + `AutoAddSignature $true`
+
+**Do not** set Postpone to `$false` — that makes Outlook ignore PowerShell signatures (compose goes blank).
+
+**Judge success by New mail**, not Settings → Signatures (that roaming page often stays empty).
+
+## Deploy all (or after editing HTML)
 
 ```powershell
 cd C:\Users\Vinny\Documents\Work
-.\Set-RcsEmailSignatures.ps1
+.\Deploy-RcsComposeSignatures.ps1
 ```
 
-Sign in as `Vincent@rapidcapitalsolutions.com` when the Microsoft login window appears.
+Sign in as `Vincent@` when prompted (`-DisableWAM` avoids device-reg hang).
 
-That script will:
-- Postpone roaming signatures (so admin HTML applies)
-- Set signatures on Vincent, nicky, info, submissions, admin
+## New employee (custom tailored)
+
+1. Create mailbox + license in M365.
+2. Copy `email-signatures\template.html` → `firstname.html`.
+3. Fill **name**, title (**Funding Advisor** unless CEO), email, Direct phone.
+4. Add a row to `$map` in `Deploy-RcsComposeSignatures.ps1` (and `Set-RcsEmailSignatures.ps1` if still used).
+5. Run `.\Deploy-RcsComposeSignatures.ps1` (or `-Mailbox` if you add that param later — currently deploys all).
+6. New hire: hard refresh Outlook → **New mail** — sig should already be at the bottom.
+
+Full checklist also lives in `Documents\Work\RAPID-CAPITAL-SOLUTIONS-PROGRESS.md` → **Email signatures (compose)**.
 
 ## Files
 
 | File | Use |
 |------|-----|
-| `vincent.html` | Vincent@ — includes Direct **(718) 814-8874** from M365 profile |
-| `nicholas.html` | nicky@ |
+| `vincent.html` | Vincent@ — CEO + Direct (718) 814-8874 |
+| `nicholas.html` | nicky@ — CEO |
 | `shared-inbox.html` | info@ / submissions@ / admin@ |
-| `template.html` | New hires |
-| `..\Set-RcsEmailSignatures.ps1` | Apply all via Exchange Online |
+| `template.html` | New hires (default title: Funding Advisor) |
+| `..\Deploy-RcsComposeSignatures.ps1` | **Canonical deploy** (compose injection) |
+| `..\Set-RcsEmailSignatures.ps1` | Older deploy script (same EXO approach) |
 
 Hosted logo: `https://rapidcapitalsolutions.com/assets/email/rcs-logo.png`
 
-## Scope note
-
-Exchange `SignatureHtml` applies to **Outlook on the web** (and New Outlook when roaming is postponed). Classic Outlook desktop may still need one paste, or it may pick up the roaming/OWA signature after sync.
+Transport rules `RCS Signature - external/internal` append after send as backup (recipients always get branding even if a client fails).
