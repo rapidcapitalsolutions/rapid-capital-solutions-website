@@ -108,17 +108,27 @@ async function handleApply(request, env) {
   const signBase = (env.SIGN_BASE_URL || 'https://rapidcapitalsolutions.com').replace(/\/$/, '');
   const signUrl = signBase + '/sign.html?t=' + token;
 
-  await sendEmail(env, {
-    to: env.NOTIFY_EMAIL || 'submissions@rapidcapitalsolutions.com',
-    subject: `[RCS] New application pending signature — ${fields.legal_name} [${applicationId}]`,
-    html: pendingEmailHtml(record, signUrl),
-    text: pendingEmailText(record, signUrl),
-  });
+  let emailSent = false;
+  let emailError = null;
+  try {
+    await sendEmail(env, {
+      to: env.NOTIFY_EMAIL || 'submissions@rapidcapitalsolutions.com',
+      subject: `[RCS] New application pending signature — ${fields.legal_name} [${applicationId}]`,
+      html: pendingEmailHtml(record, signUrl),
+      text: pendingEmailText(record, signUrl),
+    });
+    emailSent = true;
+  } catch (err) {
+    emailError = err.message || 'email_failed';
+    console.log('APPLY_EMAIL_FAILED', emailError);
+  }
 
   return json({
     ok: true,
     application_id: applicationId,
     sign_url: signUrl,
+    email_sent: emailSent,
+    email_error: emailError,
     message: 'Application received. Continue to electronic signature.',
   });
 }
@@ -222,30 +232,40 @@ async function handlePostSign(request, token, env) {
   const sigB64 = signatureDataUrl.replace(/^data:image\/png;base64,/, '');
   const certificateHtml = certificateHtmlDoc(record);
 
-  await sendEmail(env, {
-    to: notify,
-    subject: `[RCS] SIGNED application — ${record.fields.legal_name} [${record.application_id}]`,
-    html: signedEmailHtml(record),
-    text: signedEmailText(record),
-    attachments: [
-      {
-        filename: `${record.application_id}-signature.png`,
-        content: sigB64,
-      },
-      {
-        filename: `${record.application_id}-certificate.html`,
-        content: btoa(unescape(encodeURIComponent(certificateHtml))),
-      },
-    ],
-  });
+  let emailSent = false;
+  try {
+    await sendEmail(env, {
+      to: notify,
+      subject: `[RCS] SIGNED application — ${record.fields.legal_name} [${record.application_id}]`,
+      html: signedEmailHtml(record),
+      text: signedEmailText(record),
+      attachments: [
+        {
+          filename: `${record.application_id}-signature.png`,
+          content: sigB64,
+        },
+        {
+          filename: `${record.application_id}-certificate.html`,
+          content: btoa(unescape(encodeURIComponent(certificateHtml))),
+        },
+      ],
+    });
+    emailSent = true;
+  } catch (err) {
+    console.log('SIGNED_EMAIL_FAILED', err.message || err);
+  }
 
   if (applicant) {
-    await sendEmail(env, {
-      to: applicant,
-      subject: `Application received — Rapid Capital Solutions [${record.application_id}]`,
-      html: applicantConfirmHtml(record),
-      text: `Thank you. We received your signed application ${record.application_id}. A funding specialist will contact you shortly.`,
-    });
+    try {
+      await sendEmail(env, {
+        to: applicant,
+        subject: `Application received — Rapid Capital Solutions [${record.application_id}]`,
+        html: applicantConfirmHtml(record),
+        text: `Thank you. We received your signed application ${record.application_id}. A funding specialist will contact you shortly.`,
+      });
+    } catch (err) {
+      console.log('APPLICANT_EMAIL_FAILED', err.message || err);
+    }
   }
 
   return json({
@@ -253,6 +273,7 @@ async function handlePostSign(request, token, env) {
     status: 'signed',
     application_id: record.application_id,
     signed_at: now,
+    email_sent: emailSent,
   });
 }
 
