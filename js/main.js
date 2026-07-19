@@ -90,13 +90,15 @@
   const heroDisplay = document.getElementById('hero-amount-display');
   const heroApplyBtn = document.getElementById('hero-apply-btn');
   if (heroSlider && heroDisplay) {
-    const amounts = [5000, 100000, 250000, 500000, 5000000];
+    const amounts = [25000, 100000, 250000, 500000, 5000000];
     const formatAmount = (n) => '$' + n.toLocaleString('en-US');
 
     const syncHeroAmount = () => {
       const idx = Math.max(0, Math.min(amounts.length - 1, parseInt(heroSlider.value, 10) || 0));
       const val = amounts[idx];
+      const pct = amounts.length === 1 ? 100 : (idx / (amounts.length - 1)) * 100;
       heroDisplay.textContent = formatAmount(val);
+      heroSlider.style.setProperty('--fill', pct + '%');
       heroSlider.setAttribute('aria-valuenow', String(idx));
       heroSlider.setAttribute('aria-valuetext', formatAmount(val));
       if (heroApplyBtn) {
