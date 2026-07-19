@@ -10,6 +10,25 @@
   const statusEl = document.getElementById('apply-status');
   if (!form || !window.RCSApplication) return;
 
+  // Prefill amount from homepage slider (?amount=250000)
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const amount = params.get('amount');
+    const select = document.getElementById('funding_requested');
+    if (amount && select) {
+      const n = parseInt(amount, 10);
+      const opts = Array.from(select.options);
+      let best = null;
+      opts.forEach((opt) => {
+        const v = parseInt(opt.value, 10);
+        if (!v) return;
+        if (n <= v && (best == null || v < parseInt(best.value, 10))) best = opt;
+      });
+      if (!best) best = opts[opts.length - 1];
+      if (best && best.value) select.value = best.value;
+    }
+  } catch (_) { /* ignore */ }
+
   function setStatus(msg, type) {
     if (!statusEl) return;
     statusEl.textContent = msg;
