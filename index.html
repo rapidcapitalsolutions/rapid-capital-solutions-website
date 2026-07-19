@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=3">
+  <link rel="stylesheet" href="css/styles.css?v=5">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -141,50 +141,68 @@
 
   <main>
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero hero-modern">
       <div class="container hero-grid">
-        <div>
+        <div class="hero-copy">
           <div class="eyebrow">Nationwide Business Funding</div>
-          <h1>Business funding from $5K to $5M — working capital, MCA &amp; <em>lines of credit.</em></h1>
-          <p class="hero-lead">From first-round working capital to multi-million term deals — matched to your revenue and goals without the bank-branch runaround.</p>
+          <h1><span class="h1-line">Deposits look great.</span> <span class="h1-line h1-accent">Bank still said no?</span></h1>
+          <p class="hero-lead">We shop $5K–$5M across MCA, working capital, credit lines, and term deals — matched to how you actually deposit, not what a loan officer wishes was on the application.</p>
           <div class="hero-actions">
-            <a href="apply.html" class="btn btn-copper btn-lg">See What You Qualify For</a>
-            <a href="#process" class="btn btn-outline btn-lg">How It Works</a>
+            <a href="apply.html" class="btn btn-copper btn-lg">Run My Free Estimate</a>
+            <a href="tel:+18885550100" class="btn btn-outline btn-lg">(888) 555-0100</a>
           </div>
           <div class="hero-trust">
             <div class="trust-item">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-              Approvals in as few as 24 hours
+              Same-day answers on most files
             </div>
             <div class="trust-item">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              Soft pull — no impact to your credit score
+              Soft pull to start — score stays put
             </div>
             <div class="trust-item">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-              U.S.-based funding team
+              Named specialist — not a ticket queue
             </div>
           </div>
         </div>
-        <div class="hero-card reveal">
-          <h2 class="hero-card-title">Fast funding. Flexible terms.</h2>
-          <p>Many programs can be completed and funded within one business day — sometimes within hours of approval.</p>
-          <div class="metric-row">
-            <div class="metric">
-              <strong>$5K–$5M</strong>
-              <span>Funding amounts</span>
-            </div>
-            <div class="metric">
-              <strong>10+</strong>
-              <span>Financing programs</span>
-            </div>
+        <div class="hero-widget reveal">
+          <p class="hero-widget-label">Ballpark your deal size</p>
+          <div class="hero-amount-display" id="hero-amount-display">$100,000</div>
+          <input type="range" class="hero-slider" id="hero-amount-slider" min="0" max="4" value="2" aria-label="Funding amount">
+          <div class="hero-slider-labels">
+            <span>$5K</span><span>$100K</span><span>$250K</span><span>$500K</span><span>$5M</span>
           </div>
-          <ul class="mini-list">
-            <li>Payments tied to revenue, fixed, or weekly schedules</li>
-            <li>Programs for strong credit and challenged credit</li>
-            <li>Renewals and additional capital as you grow</li>
-            <li>No upfront cost to apply</li>
-          </ul>
+          <a href="apply.html" class="btn btn-copper hero-widget-btn" id="hero-apply-btn">Run My Free Estimate</a>
+          <p class="hero-widget-note">No credit hit · No commitment · Answers in hours</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Steps -->
+    <section class="steps-band" id="process">
+      <div class="container">
+        <div class="section-head center reveal">
+          <div class="section-label">How It Works</div>
+          <h2>Application to deposit — three moves</h2>
+          <p>No branch visits. No three-week silence. Just a straight path to capital.</p>
+        </div>
+        <div class="steps-row">
+          <div class="step-card reveal">
+            <div class="step-num">1</div>
+            <h3>Drop the basics</h3>
+            <p>Two-minute app and a soft pull. No tax returns or bank logins just to see where you stand.</p>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-num">2</div>
+            <h3>Pick from real offers</h3>
+            <p>Your specialist lines up what you actually qualify for — side by side, zero single-product pitch.</p>
+          </div>
+          <div class="step-card reveal">
+            <div class="step-num">3</div>
+            <h3>Sign and get wired</h3>
+            <p>E-sign, upload docs, and funds can land in your account as fast as the same week.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -193,201 +211,138 @@
     <div class="stats-strip">
       <div class="container stats-grid reveal">
         <div>
+          <div class="stat-num">$5K–$5M</div>
+          <div class="stat-label">Deal sizes we place daily</div>
+        </div>
+        <div>
           <div class="stat-num">24hr</div>
-          <div class="stat-label">Funding available in as little as one day</div>
+          <div class="stat-label">Same-week funding on many programs</div>
         </div>
         <div>
           <div class="stat-num">50</div>
-          <div class="stat-label">States served nationwide</div>
+          <div class="stat-label">States — full nationwide coverage</div>
         </div>
         <div>
           <div class="stat-num">10+</div>
-          <div class="stat-label">Financing programs available</div>
-        </div>
-        <div>
-          <div class="stat-num">$5K–$5M</div>
-          <div class="stat-label">Funding amounts available</div>
+          <div class="stat-label">Program types under one roof</div>
         </div>
       </div>
     </div>
 
-    <!-- Process -->
-    <section id="process" class="alt">
-      <div class="container">
-        <div class="section-head center reveal">
-          <div class="section-label">How It Works</div>
-          <h2>Three steps. No appointments. No bank branches.</h2>
-          <p>We've stripped the funding process down to the parts that actually matter.</p>
-        </div>
-        <div class="process-grid process-grid-3">
-          <div class="process-step reveal">
-            <h3>Tell us about your business</h3>
-            <p>A quick form covers what we need to start. No tax returns or bank logins upfront — just the basics to see what you qualify for.</p>
-          </div>
-          <div class="process-step reveal">
-            <h3>Compare your offers</h3>
-            <p>A funding specialist walks you through the programs your business qualifies for, side by side — so you can pick what fits your cash flow.</p>
-          </div>
-          <div class="process-step reveal">
-            <h3>Get funded</h3>
-            <p>Choose your program, sign electronically, and funds typically land in your business account within one to three business days.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- About -->
-    <section id="about">
-      <div class="container">
-        <div class="section-head center reveal">
-          <div class="section-label">About Us</div>
-          <h2>Your financial partner for every stage of growth</h2>
+    <section id="about" class="alt">
+      <div class="container about-split reveal">
+        <div>
+          <div class="section-label">Who We Are</div>
+          <h2>Banks ghost you at $500K — or the second your FICO dips below 680</h2>
         </div>
-        <div class="about-block reveal" style="max-width: 52rem; margin-inline: auto; text-align: center;">
-          <p style="color: var(--slate); font-size: 1.1rem; line-height: 1.75; margin: 0 0 1.25rem;">
-            At Rapid Capital Solutions, our focus is business financing. We provide options for businesses of every size —
-            and our qualifications are broader and more flexible than most banks and traditional lenders.
-          </p>
-          <p style="color: var(--slate); font-size: 1.05rem; line-height: 1.75; margin: 0 0 1.5rem;">
-            Whether you need a credit line, bridge financing, working capital, or a longer-term loan, we work with you to
-            find the right program and build a relationship that gets better as your business grows.
-          </p>
-          <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
-            <a href="about.html" class="btn btn-outline">Our Story</a>
-            <a href="team.html" class="btn btn-outline">Meet the Team</a>
-          </div>
+        <div class="about-prose">
+          <p>Rapid Capital Solutions is a funding desk built for operators who still have strong revenue but can't afford to wait six weeks for a maybe. We work across MCA, working capital, revolving lines, and term structures through a nationwide lender network.</p>
+          <p>You get a named specialist, transparent comparisons, and programs sized to how your business actually deposits — not how a loan committee wishes it looked on paper.</p>
+          <a href="about.html" class="btn btn-outline">Meet the team behind the desk</a>
         </div>
       </div>
     </section>
 
     <!-- Why us -->
-    <section class="alt">
+    <section>
       <div class="container">
         <div class="section-head center reveal">
-          <div class="section-label">Why Rapid Capital Solutions</div>
-          <h2>Built for business owners who want a straight answer</h2>
+          <div class="section-label">The RCS Difference</div>
+          <h2>Straight numbers. No runaround.</h2>
+          <p>We win when you pick the right structure — not when we force the wrong one.</p>
         </div>
-        <div class="cards-3">
-          <div class="card reveal">
-            <div class="card-icon">◎</div>
-            <h3>Soft-pull pre-qualification</h3>
-            <p>Find out what you qualify for without affecting your personal credit. A hard pull only happens when you choose to move forward.</p>
+        <div class="why-row reveal">
+          <div class="why-item">
+            <strong>Answers today, not next quarter</strong>
+            <span>Most files get a same-day read. Waiting weeks for a decline isn't part of the deal.</span>
           </div>
-          <div class="card reveal">
-            <div class="card-icon">◈</div>
-            <h3>Real specialists, not chatbots</h3>
-            <p>Every applicant is paired with a funding specialist who knows your industry. Direct number. Real answers.</p>
+          <div class="why-item">
+            <strong>A name and a direct line</strong>
+            <span>One specialist who knows your industry — not a rotating call center script.</span>
           </div>
-          <div class="card reveal">
-            <div class="card-icon">◉</div>
-            <h3>No bank-branch runaround</h3>
-            <p>The entire process is online. Upload documents, sign electronically, get funded — no appointments, no paper packets.</p>
+          <div class="why-item">
+            <strong>Compare before you commit</strong>
+            <span>Multiple programs on the table so you choose what fits your cash flow.</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Programs -->
-    <section id="solutions">
+    <!-- Programs showcase -->
+    <section id="solutions" class="alt">
       <div class="container">
         <div class="section-head center reveal">
-          <div class="section-label">Our Programs</div>
-          <h2>Business funds to meet your needs</h2>
-          <p>No matter what you need capital for — immediately or just for a rainy day — we have a program built for it.</p>
+          <div class="section-label">Financing Programs</div>
+          <h2>Pick the structure. We handle the match.</h2>
+          <p>Three of our most-requested paths — with a full menu if you need something else.</p>
         </div>
-        <div class="cards-3">
-          <div class="card reveal">
-            <a href="working-capital.html" class="card-link">
-              <div class="card-icon">01</div>
-              <h3>Working Capital</h3>
-              <p>Bridge cash flow gaps without long-term debt. Funding in as little as 24 hours with flexible use of funds.</p>
-            </a>
-          </div>
-          <div class="card reveal">
-            <a href="merchant-cash-advance.html" class="card-link">
-              <div class="card-icon">02</div>
-              <h3>Merchant Cash Advance</h3>
-              <p>Upfront capital repaid as a percentage of daily card or bank deposits. Fast approvals based on revenue.</p>
-            </a>
-          </div>
-          <div class="card reveal">
-            <a href="business-line-of-credit.html" class="card-link">
-              <div class="card-icon">03</div>
-              <h3>Business Line of Credit</h3>
-              <p>Revolving access — pay interest only on what you draw. Perfect for seasonal swings and unexpected costs.</p>
-            </a>
-          </div>
-          <div class="card reveal">
-            <a href="term-business-loan.html" class="card-link">
-              <div class="card-icon">04</div>
-              <h3>Term Loans</h3>
-              <p>Fixed terms up to 36 months. Up to $5 million for expansion, equipment, payroll, or debt consolidation.</p>
-            </a>
-          </div>
-          <div class="card reveal">
-            <a href="equipment-financing.html" class="card-link">
-              <div class="card-icon">05</div>
-              <h3>Equipment Financing</h3>
-              <p>Finance vehicles, machinery, or technology with the asset as collateral. Competitive rates on larger deals.</p>
-            </a>
-          </div>
-          <div class="card reveal">
-            <a href="bad-credit-business-funding.html" class="card-link">
-              <div class="card-icon">06</div>
-              <h3>Bad Credit Programs</h3>
-              <p>Revenue-based approvals for owners with credit challenges. Many programs use a soft pull to start.</p>
-            </a>
-          </div>
+        <div class="showcase-grid">
+          <a href="merchant-cash-advance.html" class="showcase-card reveal">
+            <div class="showcase-title"><span>Merchant Cash</span><span>Advance</span></div>
+            <p>Lump sum upfront, repaid as a slice of daily card or ACH deposits. Built for businesses that need speed and have consistent volume.</p>
+            <span class="showcase-link">Explore MCA →</span>
+          </a>
+          <a href="working-capital.html" class="showcase-card reveal">
+            <div class="showcase-title"><span>Working</span><span>Capital</span></div>
+            <p>Cover payroll gaps, stock up before a rush, or float receivables. Flexible use from $5K into the mid six figures.</p>
+            <span class="showcase-link">Explore working capital →</span>
+          </a>
+          <a href="business-line-of-credit.html" class="showcase-card reveal">
+            <div class="showcase-title"><span>Revolving</span><span>Credit Line</span></div>
+            <p>Draw what you need, when you need it. Pay on the balance you use — ideal for seasonal swings and surprise expenses.</p>
+            <span class="showcase-link">Explore credit lines →</span>
+          </a>
         </div>
-        <p class="center-link reveal"><a href="services.html">View all programs →</a> · <a href="funding-guides.html">Funding guides</a></p>
+        <p class="center-link reveal"><a href="services.html">Full program list →</a> · <a href="funding-guides.html">Funding guides by use case</a></p>
       </div>
     </section>
 
     <!-- Use cases -->
-    <section id="use-cases" class="alt">
+    <section id="use-cases">
       <div class="container">
         <div class="section-head center reveal">
-          <div class="section-label">Common Uses</div>
-          <h2>What business owners use funding for</h2>
-          <p>Capital for payroll, growth, equipment, and everything in between.</p>
+          <div class="section-label">Put Capital To Work</div>
+          <h2>Where owners actually spend the money</h2>
+          <p>Payroll, expansion, gear, slow season — if it's for the business, it's on the table.</p>
         </div>
         <div class="use-cases-grid">
           <div class="use-case-col reveal">
-            <h3>Growth &amp; expansion</h3>
+            <h3>Scale &amp; open doors</h3>
             <ul>
-              <li>Open new locations or remodel existing ones</li>
-              <li>Launch new products or service lines</li>
-              <li>Scale marketing and customer acquisition</li>
-              <li>Hire staff or expand operations</li>
+              <li>Second location or a full remodel</li>
+              <li>New product lines and ad pushes</li>
+              <li>Hiring ahead of a busy season</li>
+              <li>Buying out a partner or competitor</li>
             </ul>
-            <a href="term-business-loan.html">Growth financing →</a>
+            <a href="term-business-loan.html">Growth &amp; term deals →</a>
           </div>
           <div class="use-case-col reveal">
-            <h3>Operations &amp; cash flow</h3>
+            <h3>Keep the lights on</h3>
             <ul>
-              <li>Cover payroll, rent, and daily expenses</li>
-              <li>Bridge gaps between receivables and payables</li>
-              <li>Handle emergency repairs or seasonal slowdowns</li>
-              <li>Stock inventory before peak demand</li>
+              <li>Payroll when receivables lag</li>
+              <li>Rent, utilities, and vendor tabs</li>
+              <li>Emergency repairs without draining reserves</li>
+              <li>Inventory before a holiday rush</li>
             </ul>
-            <a href="working-capital.html">Working capital →</a>
+            <a href="working-capital.html">Cash flow programs →</a>
           </div>
           <div class="use-case-col reveal">
-            <h3>Equipment &amp; upgrades</h3>
+            <h3>Buy the tools that pay you back</h3>
             <ul>
-              <li>Purchase vehicles, machinery, or fleet assets</li>
-              <li>Upgrade POS, technology, or kitchen equipment</li>
-              <li>Modernize workspace for efficiency</li>
-              <li>Stay competitive with industry innovations</li>
+              <li>Fleet, rigs, and heavy equipment</li>
+              <li>Kitchen, POS, and tech upgrades</li>
+              <li>Warehouse and shop build-outs</li>
+              <li>Staying ahead of industry changes</li>
             </ul>
-            <a href="equipment-financing.html">Equipment financing →</a>
+            <a href="equipment-financing.html">Equipment &amp; asset deals →</a>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Industries -->
-    <section>
+    <section class="alt">
       <div class="container">
         <div class="section-head center reveal">
           <div class="section-label">Industries We Fund</div>
@@ -413,22 +368,21 @@
     <section>
       <div class="container">
         <div class="section-head center reveal">
-          <div class="section-label">Client Stories</div>
-          <h2>What our clients say</h2>
-          <p>We retain the majority of our clients — most come back for additional funding or refer other business owners.</p>
+          <div class="section-label">Owner Feedback</div>
+          <h2>They came for speed — stayed for the honesty</h2>
         </div>
+        <blockquote class="testimonial-featured reveal">
+          <p>"Every other broker pushed one product. RCS laid out three options, explained the math on each, and I was funded before the week was out."</p>
+          <footer><strong>Michael R.</strong> — Restaurant Group, FL</footer>
+        </blockquote>
         <div class="testimonials-grid">
           <blockquote class="testimonial reveal">
-            <p>"I needed funding to expand my restaurant and they got me almost exactly what I was looking for — it worked out even better than I expected. After bad experiences with other companies, it was a pleasure to work with someone honest and transparent."</p>
-            <footer><strong>Michael R.</strong> — Restaurant Owner</footer>
+            <p>"Credit was rough and I still walked away with a line plus an equipment deal — better than anything my bank ever offered."</p>
+            <footer><strong>Irma S.</strong> — Commercial Services, TX</footer>
           </blockquote>
           <blockquote class="testimonial reveal">
-            <p>"My credit wasn't great when I started looking for equipment financing. They still got me approved for a loan and a line of credit — better terms than anything I'd been offered before."</p>
-            <footer><strong>Irma S.</strong> — Small Business Owner</footer>
-          </blockquote>
-          <blockquote class="testimonial reveal">
-            <p>"I'd been funded four times before but nobody ever improved my terms over time. After a few months with Rapid Capital Solutions I had a line of credit I kept increasing — and better terms on every deal after that."</p>
-            <footer><strong>Randall D.</strong> — Retail Operator</footer>
+            <p>"Four funders later, these are the only people who improved my terms every time I came back. That says everything."</p>
+            <footer><strong>Randall D.</strong> — Multi-Location Retail, GA</footer>
           </blockquote>
         </div>
       </div>
