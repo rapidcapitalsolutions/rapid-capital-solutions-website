@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://rapidcapitalsolutions.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/about.html</loc><changefreq>monthly</changefreq><priority>0.80</priority></url>
   <url><loc>https://rapidcapitalsolutions.com/apply.html</loc><changefreq>monthly</changefreq><priority>0.95</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/merchant-cash-advance.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/working-capital.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/business-line-of-credit.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/bad-credit-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/restaurant-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/about.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/services.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/team.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/contact.html</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://rapidcapitalsolutions.com/careers.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/auto-services-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/bad-credit-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/beauty-wellness-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/bridge-funding.html</loc><changefreq>monthly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/business-line-of-credit.html</loc><changefreq>monthly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/careers.html</loc><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/construction-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/contact.html</loc><changefreq>monthly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/ecommerce-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/equipment-financing.html</loc><changefreq>monthly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/funding-guides.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/healthcare-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/hospitality-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/</loc><changefreq>weekly</changefreq><priority>1.00</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/industries.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/invoice-financing.html</loc><changefreq>monthly</changefreq><priority>0.88</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/landscaping-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/manufacturing-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/merchant-cash-advance.html</loc><changefreq>monthly</changefreq><priority>0.88</priority></url>
   <url><loc>https://rapidcapitalsolutions.com/privacy.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/professional-services-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/real-estate-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/restaurant-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/retail-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/salon-spa-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/services.html</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/staffing-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/team.html</loc><changefreq>monthly</changefreq><priority>0.55</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/technology-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/term-business-loan.html</loc><changefreq>monthly</changefreq><priority>0.88</priority></url>
   <url><loc>https://rapidcapitalsolutions.com/terms.html</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/trucking-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/wholesale-business-funding.html</loc><changefreq>monthly</changefreq><priority>0.82</priority></url>
+  <url><loc>https://rapidcapitalsolutions.com/working-capital.html</loc><changefreq>monthly</changefreq><priority>0.88</priority></url>
 </urlset>

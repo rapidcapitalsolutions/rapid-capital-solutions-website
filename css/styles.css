@@ -687,8 +687,8 @@ section.alt { background: var(--white); }
 }
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
-  gap: 2.5rem;
+  grid-template-columns: 1.4fr repeat(5, minmax(0, 1fr));
+  gap: 2rem;
   margin-bottom: 3rem;
 }
 .footer-brand p { margin: 1rem 0 0; line-height: 1.6; max-width: 22rem; }
