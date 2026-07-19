@@ -432,7 +432,31 @@ function applicantConfirmHtml(record, hasPdf) {
     ${hasPdf ? '<p>A copy of your signed application PDF is attached for your records.</p>' : ''}
     <p>A Rapid Capital Solutions specialist will review your file and contact you shortly — usually within one business day.</p>
     <p>Questions? Email <a href="mailto:info@rapidcapitalsolutions.com">info@rapidcapitalsolutions.com</a>.</p>
-    <p>— Rapid Capital Solutions</p>
+    ${emailSignatureHtml()}
+  `;
+}
+
+function emailSignatureHtml() {
+  return `
+    <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;max-width:480px;margin-top:28px;">
+      <tr>
+        <td style="padding:0 0 12px 0;">
+          <a href="https://rapidcapitalsolutions.com/" target="_blank" style="text-decoration:none;">
+            <img src="https://rapidcapitalsolutions.com/assets/email/rcs-logo.png" width="240" height="54" alt="Rapid Capital Solutions" style="display:block;border:0;">
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-left:3px solid #b87333;padding-left:12px;">
+          <p style="margin:0 0 2px 0;font-size:13px;font-weight:700;color:#0c1222;">Rapid Capital Solutions</p>
+          <p style="margin:0 0 6px 0;font-size:12px;color:#5a6577;">Funding Team</p>
+          <p style="margin:0;font-size:12px;line-height:1.5;">
+            <a href="mailto:info@rapidcapitalsolutions.com" style="color:#0c1222;text-decoration:none;">info@rapidcapitalsolutions.com</a><br>
+            <a href="https://rapidcapitalsolutions.com/" style="color:#b87333;text-decoration:none;font-weight:600;">www.rapidcapitalsolutions.com</a>
+          </p>
+        </td>
+      </tr>
+    </table>
   `;
 }
 
