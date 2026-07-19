@@ -238,6 +238,7 @@ export async function buildApplicationPdf(record) {
   row('ERC grant applied', f.erc_grant);
   row('Bank statements', f.submit_bank_stmts);
   row('CC statements', f.submit_cc_stmts);
+  row('Uploaded files', f.statement_file_names || f.statement_files_count);
   row('Current advance', f.has_current_advance);
   if (String(f.has_current_advance).toLowerCase() === 'yes') {
     row('Advance balance', money(f.current_advance_balance));

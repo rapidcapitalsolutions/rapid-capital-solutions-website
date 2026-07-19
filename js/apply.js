@@ -10,6 +10,10 @@
   const statusEl = document.getElementById('apply-status');
   if (!form || !window.RCSApplication) return;
 
+  const MAX_FILES = 8;
+  const MAX_FILE_BYTES = 4 * 1024 * 1024;
+  const ALLOWED_EXT = /\.(pdf|jpe?g|png|gif|webp|docx?|xlsx?|csv)$/i;
+
   // Prefill amount from homepage slider (?amount=250000)
   try {
     const params = new URLSearchParams(window.location.search);
@@ -33,8 +37,7 @@
   function syncAdvance() {
     const yes = form.querySelector('input[name="has_current_advance"][value="Yes"]');
     if (!advanceDetails) return;
-    const show = yes && yes.checked;
-    advanceDetails.hidden = !show;
+    advanceDetails.hidden = !(yes && yes.checked);
   }
   form.querySelectorAll('input[name="has_current_advance"]').forEach((el) => {
     el.addEventListener('change', syncAdvance);
@@ -51,6 +54,82 @@
     el.addEventListener('change', syncLiens);
   });
   syncLiens();
+
+  const fileInput = document.getElementById('statement_files');
+  const fileListEl = document.getElementById('statement-file-list');
+  const stmtsUploaded = document.getElementById('stmts_uploaded');
+
+  function formatSize(n) {
+    if (n < 1024) return n + ' B';
+    if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+    return (n / (1024 * 1024)).toFixed(1) + ' MB';
+  }
+
+  function syncFileList() {
+    if (!fileInput || !fileListEl) return;
+    const files = Array.from(fileInput.files || []);
+    if (!files.length) {
+      fileListEl.hidden = true;
+      fileListEl.innerHTML = '';
+      return;
+    }
+    fileListEl.hidden = false;
+    fileListEl.innerHTML = files
+      .map((f) => `<li><span>${escapeHtml(f.name)}</span><span>${formatSize(f.size)}</span></li>`)
+      .join('');
+    if (stmtsUploaded && files.length) stmtsUploaded.checked = true;
+  }
+
+  function escapeHtml(s) {
+    return String(s || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', syncFileList);
+  }
+
+  function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || '');
+        const comma = result.indexOf(',');
+        resolve({
+          filename: file.name,
+          content_type: file.type || 'application/octet-stream',
+          size: file.size,
+          content: comma >= 0 ? result.slice(comma + 1) : result,
+        });
+      };
+      reader.onerror = () => reject(new Error('Could not read ' + file.name));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function collectDocuments() {
+    const files = Array.from((fileInput && fileInput.files) || []);
+    if (!files.length) return [];
+    if (files.length > MAX_FILES) {
+      throw new Error('Please upload at most ' + MAX_FILES + ' statement files.');
+    }
+    for (const f of files) {
+      if (!ALLOWED_EXT.test(f.name)) {
+        throw new Error('Unsupported file type: ' + f.name);
+      }
+      if (f.size > MAX_FILE_BYTES) {
+        throw new Error(f.name + ' is over 4 MB. Please compress or split it.');
+      }
+    }
+    const docs = [];
+    for (const f of files) {
+      docs.push(await readFileAsBase64(f));
+    }
+    return docs;
+  }
 
   function setStatus(msg, type) {
     if (!statusEl) return;
@@ -84,7 +163,7 @@
       btn.disabled = true;
       btn.textContent = 'Submitting…';
     }
-    setStatus('Submitting your application…', 'info');
+    setStatus('Preparing your application…', 'info');
 
     const workerUrl = cfg.applyWorkerUrl || '';
 
@@ -99,11 +178,21 @@
     }
 
     try {
+      const documents = await collectDocuments();
+      if (documents.length) {
+        fields.statement_files_count = String(documents.length);
+        fields.submit_bank_stmts = fields.submit_bank_stmts || 'Uploaded with app';
+        setStatus('Uploading ' + documents.length + ' statement file(s)…', 'info');
+      } else {
+        setStatus('Submitting your application…', 'info');
+      }
+
       const res = await fetch(workerUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           fields,
+          documents,
           api_payload: window.RCSApplication.toManualApiPayload(fields),
         }),
       });

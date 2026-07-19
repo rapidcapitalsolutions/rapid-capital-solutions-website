@@ -139,6 +139,7 @@
       ['Judgments / liens', preview.has_liens],
       ['ERC grant', preview.erc_grant],
       ['Bank statements', preview.submit_bank_stmts],
+      ['Uploaded statements', preview.statement_file_names || (preview.statement_files_count ? preview.statement_files_count + ' file(s)' : '')],
       ['Current advance', preview.has_current_advance],
       ['Advance balance', preview.current_advance_balance ? money(preview.current_advance_balance) : ''],
       ['Advance held with', preview.current_advance_holder],

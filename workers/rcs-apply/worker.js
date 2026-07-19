@@ -84,17 +84,33 @@ async function handleApply(request, env) {
     return json({ ok: false, error: 'missing_required_fields' }, 400);
   }
 
+  let documents;
+  try {
+    documents = normalizeDocuments(body.documents);
+  } catch (err) {
+    return json({ ok: false, error: err.message || 'invalid_documents' }, 400);
+  }
+
   const applicationId = fields.application_id || ('RCS-' + crypto.randomUUID().slice(0, 8).toUpperCase());
   const token = crypto.randomUUID().replace(/-/g, '');
   const now = new Date().toISOString();
   const ip = request.headers.get('cf-connecting-ip') || '';
   const ua = request.headers.get('user-agent') || '';
 
+  if (documents.length) {
+    fields.statement_files_count = String(documents.length);
+    fields.statement_file_names = documents.map((d) => d.filename).join(', ');
+    if (!fields.submit_bank_stmts || fields.submit_bank_stmts === 'Yes') {
+      fields.submit_bank_stmts = 'Uploaded with app';
+    }
+  }
+
   const record = {
     application_id: applicationId,
     token,
     status: 'pending_signature',
     fields: { ...fields, application_id: applicationId },
+    documents,
     created_at: now,
     apply_ip: ip,
     apply_ua: ua,
@@ -188,6 +204,8 @@ async function handleGetSign(token, env) {
       has_current_advance: f.has_current_advance || '',
       current_advance_balance: f.current_advance_balance || '',
       current_advance_holder: f.current_advance_holder || '',
+      statement_files_count: f.statement_files_count || '',
+      statement_file_names: f.statement_file_names || '',
     },
   });
 }
@@ -270,6 +288,12 @@ async function handlePostSign(request, token, env) {
   if (pdfAttachment) {
     attachments.unshift(pdfAttachment);
   }
+  for (const doc of record.documents || []) {
+    attachments.push({
+      filename: sanitizeFilename(doc.filename),
+      content: doc.content,
+    });
+  }
 
   let emailSent = false;
   try {
@@ -350,6 +374,7 @@ async function sendEmail(env, { to, subject, html, text, attachments }) {
 
 function pendingEmailHtml(record, signUrl) {
   const f = record.fields;
+  const docs = record.documents || [];
   return `
     <h2>New RCS application (awaiting e-sign)</h2>
     <p><strong>ID:</strong> ${esc(record.application_id)}</p>
@@ -357,6 +382,7 @@ function pendingEmailHtml(record, signUrl) {
     <p><strong>Owner:</strong> ${esc(f.owner_name)} &lt;${esc(f.owner_email)}&gt;</p>
     <p><strong>Phone:</strong> ${esc(f.owner_phone)}</p>
     <p><strong>Amount:</strong> ${esc(money(f.funding_requested))}</p>
+    <p><strong>Statements uploaded:</strong> ${docs.length ? esc(docs.map((d) => d.filename).join(', ')) : 'None (will attach after e-sign if provided)'}</p>
     <p><strong>Sign link:</strong> <a href="${esc(signUrl)}">${esc(signUrl)}</a></p>
     <hr>
     <pre style="font-family:monospace;white-space:pre-wrap">${esc(formatFields(f, true))}</pre>
@@ -378,6 +404,9 @@ function signedEmailHtml(record, hasPdf) {
     <p><strong>IP:</strong> ${esc(s.ip)}</p>
     <p><strong>Document hash:</strong> ${esc(s.document_hash)}</p>
     ${hasPdf ? '<p><strong>Attached:</strong> Branded RCS funding application PDF</p>' : ''}
+    <p><strong>Statement files:</strong> ${(record.documents || []).length
+      ? esc((record.documents || []).map((d) => d.filename).join(', '))
+      : 'None'}</p>
     <p><img src="${esc(s.signature_data_url)}" alt="Signature" style="max-width:320px;border:1px solid #ddd;background:#fff;padding:8px" /></p>
     <hr>
     <h3>Application details</h3>
@@ -462,6 +491,7 @@ function formatFields(f, maskSensitive) {
     ['ERC grant', f.erc_grant],
     ['Bank statements', f.submit_bank_stmts],
     ['CC statements', f.submit_cc_stmts],
+    ['Statement files', f.statement_file_names || f.statement_files_count],
     ['Current advance', f.has_current_advance],
     ['Advance balance', f.current_advance_balance],
     ['Advance daily', f.current_advance_daily],
@@ -483,6 +513,45 @@ function maskDl(dl) {
   const s = String(dl || '');
   if (s.length < 4) return '****';
   return '*'.repeat(Math.max(0, s.length - 4)) + s.slice(-4);
+}
+
+const MAX_DOCS = 8;
+const MAX_DOC_BYTES = 4 * 1024 * 1024;
+const ALLOWED_DOC = /\.(pdf|jpe?g|png|gif|webp|docx?|xlsx?|csv)$/i;
+
+function normalizeDocuments(raw) {
+  if (!raw) return [];
+  if (!Array.isArray(raw)) throw new Error('documents_must_be_array');
+  if (raw.length > MAX_DOCS) throw new Error('too_many_documents');
+  const out = [];
+  let total = 0;
+  for (const item of raw) {
+    const filename = sanitizeFilename(String(item.filename || 'statement.bin'));
+    if (!ALLOWED_DOC.test(filename)) throw new Error('unsupported_file_type:' + filename);
+    const content = String(item.content || '').replace(/\s/g, '');
+    if (!content) throw new Error('empty_document:' + filename);
+    // Approximate decoded size from base64
+    const approx = Math.floor((content.length * 3) / 4);
+    if (approx > MAX_DOC_BYTES) throw new Error('file_too_large:' + filename);
+    total += approx;
+    if (total > MAX_DOC_BYTES * 6) throw new Error('documents_total_too_large');
+    out.push({
+      filename,
+      content_type: String(item.content_type || 'application/octet-stream'),
+      size: approx,
+      content,
+    });
+  }
+  return out;
+}
+
+function sanitizeFilename(name) {
+  const base = String(name || 'file')
+    .replace(/[/\\?%*:|"<>]/g, '-')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 120);
+  return base || 'statement.bin';
 }
 
 function esc(s) {
