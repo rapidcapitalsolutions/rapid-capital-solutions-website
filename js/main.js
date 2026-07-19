@@ -85,25 +85,4 @@
       window.location.href = 'apply.html';
     });
   }
-
-  const heroSlider = document.getElementById('hero-amount-slider');
-  const heroDisplay = document.getElementById('hero-amount-display');
-  const heroApplyBtn = document.getElementById('hero-apply-btn');
-  if (heroSlider && heroDisplay) {
-    const amounts = [5000, 100000, 250000, 500000, 5000000];
-    const formatAmount = (n) => {
-      if (n >= 1000000) return '$' + (n / 1000000) + 'M';
-      if (n >= 1000) return '$' + Math.round(n / 1000) + 'K';
-      return '$' + n.toLocaleString();
-    };
-    const syncHeroAmount = () => {
-      const val = amounts[Number(heroSlider.value)] || amounts[2];
-      heroDisplay.textContent = formatAmount(val);
-      if (heroApplyBtn) {
-        heroApplyBtn.href = 'apply.html?amount=' + encodeURIComponent(String(val));
-      }
-    };
-    heroSlider.addEventListener('input', syncHeroAmount);
-    syncHeroAmount();
-  }
 })();
