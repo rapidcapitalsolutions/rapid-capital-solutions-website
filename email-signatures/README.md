@@ -31,16 +31,26 @@ cd C:\Users\Vinny\Documents\Work
 
 Sign in as `Vincent@` when prompted (`-DisableWAM` avoids device-reg hang).
 
+## Outlook iOS (phone app)
+
+Microsoft **does not** sync OWA/PowerShell signatures into the Outlook iOS app. Paste once:
+
+1. Open the matching file: `vincent-ios.txt` / `nicholas-ios.txt` / `shared-ios.txt`
+2. iPhone Outlook → **Settings** → **Signature** → turn on **Per Account Signature** if needed
+3. Paste into the account’s signature field
+
+Outbound mail from iOS still gets the full HTML branding via Exchange transport rules (recipients see it even if compose only shows the short text).
+
 ## New employee (custom tailored)
 
 1. Create mailbox + license in M365.
-2. Copy `email-signatures\template.html` → `firstname.html`.
+2. Copy `email-signatures\template.html` → `firstname.html` (+ `firstname-ios.txt` for iPhone paste).
 3. Fill **name**, title (**Funding Advisor** unless CEO), email, Direct phone.
-4. Add a row to `$map` in `Deploy-RcsComposeSignatures.ps1` (and `Set-RcsEmailSignatures.ps1` if still used).
-5. Run `.\Deploy-RcsComposeSignatures.ps1` (or `-Mailbox` if you add that param later — currently deploys all).
-6. New hire: hard refresh Outlook → **New mail** — sig should already be at the bottom.
+4. Add a row to `$map` in `Deploy-RcsComposeSignatures.ps1`.
+5. Run `.\Deploy-RcsComposeSignatures.ps1`.
+6. New hire: hard refresh Outlook web → **New mail**; on iPhone paste from `*-ios.txt`.
 
-Full checklist also lives in `Documents\Work\RAPID-CAPITAL-SOLUTIONS-PROGRESS.md` → **Email signatures (compose)**.
+Full checklist: `Documents\Work\RAPID-CAPITAL-SOLUTIONS-PROGRESS.md` → **Email signatures (compose)**.
 
 ## Files
 
@@ -50,9 +60,9 @@ Full checklist also lives in `Documents\Work\RAPID-CAPITAL-SOLUTIONS-PROGRESS.md
 | `nicholas.html` | nicky@ — CEO |
 | `shared-inbox.html` | info@ / submissions@ / admin@ |
 | `template.html` | New hires (default title: Funding Advisor) |
+| `vincent-ios.txt` / `nicholas-ios.txt` / `shared-ios.txt` | Paste into Outlook iOS Signature |
 | `..\Deploy-RcsComposeSignatures.ps1` | **Canonical deploy** (compose injection) |
-| `..\Set-RcsEmailSignatures.ps1` | Older deploy script (same EXO approach) |
 
-Hosted logo: `https://rapidcapitalsolutions.com/assets/email/rcs-logo.png`
+Hosted logo: `https://rapidcapitalsolutions.com/assets/email/rcs-logo.png?v=2`
 
 Transport rules `RCS Signature - external/internal` append after send as backup (recipients always get branding even if a client fails).
